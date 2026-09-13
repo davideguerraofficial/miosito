@@ -105,6 +105,8 @@ button, a { -webkit-tap-highlight-color: transparent; }
   list-style: none;
 }
 
+.site-nav { margin-left: auto; order: 2; }
+
 .site-nav a {
   position: relative;
   display: inline-block;
@@ -143,7 +145,42 @@ button, a { -webkit-tap-highlight-color: transparent; }
   background: transparent;
   color: #fff;
   cursor: pointer;
+  order: 4;
 }
+
+.language-switcher {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  margin-left: 18px;
+  padding: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.04);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  line-height: 1;
+  order: 3;
+  white-space: nowrap;
+}
+
+.language-choice {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 31px;
+  padding: 7px 9px;
+  border: 0;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.66);
+  font: inherit;
+  cursor: pointer;
+}
+
+.language-choice:hover { color: #fff; }
+.language-choice[aria-pressed="true"] { background: var(--sand-light); color: var(--ink); }
+.language-flag { font-size: 1.05rem; line-height: 1; }
+.language-name { font-size: 0.65rem; }
 
 .eyebrow {
   margin: 0 0 14px;
@@ -436,6 +473,8 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .site-nav ul { display: grid; gap: 0; }
   .site-nav a { display: block; padding: 15px 0; }
   .site-nav a::after { right: auto; bottom: 9px; width: 34px; }
+  .language-switcher { margin-left: auto; margin-right: 10px; order: 2; }
+  .menu-toggle { order: 3; }
   .hero-grid, .page-intro .section-inner, .editorial-grid, .bio-story, .book-feature, .book-feature--reverse, .contact-layout { grid-template-columns: 1fr; }
   .home-hero, .hero-grid { min-height: auto; }
   .hero-copy { padding: 75px 0 35px; }
@@ -457,6 +496,9 @@ button, a { -webkit-tap-highlight-color: transparent; }
 @media (max-width: 560px) {
   :root { --page: min(100% - 36px, 1180px); }
   .header-inner { min-height: 66px; }
+  .language-switcher { margin-right: 7px; }
+  .language-choice { padding: 7px; }
+  .language-name { display: none; }
   .site-nav { top: 66px; }
   .display { font-size: clamp(3rem, 17vw, 5.1rem); }
   .hero-image-wrap { padding: 0 0 25px 25px; }
