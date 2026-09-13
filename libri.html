@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opere e Libri - Davide Guerra</title>
+    <!-- Import Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f6f4ee;
+            color: #2b2b2b;
+            line-height: 1.6;
+        }
+
+        /* HEADER E NAVIGAZIONE */
+        header {
+            background-color: #1c1c1c;
+            padding: 18px 0;
+            text-align: center;
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 35px;
+            flex-wrap: wrap;
+        }
+        nav a {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            transition: color 0.2s ease;
+        }
+        nav a:hover, nav a.active {
+            color: #c86823;
+        }
+
+        /* CONTENITORE PRINCIPALE */
+        main {
+            max-width: 1000px;
+            margin: 60px auto;
+            padding: 0 20px;
+        }
+
+        /* SEZIONE INTRODUTTIVA */
+        .intro-section {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 50px auto;
+        }
+        .intro-section h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 15px;
+        }
+        .intro-section p {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 1.15rem;
+            color: #555555;
+            line-height: 1.6;
+        }
+
+        /* GRIGLIA SIMMETRICA A DUE COLONNE */
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 35px;
+            align-items: stretch;
+        }
+
+        /* CARD DEL LIBRO */
+        .book-card {
+            background-color: #ffffff;
+            border: 2px solid #c86823;
+            border-radius: 10px;
+            padding: 35px 25px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .book-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+        }
+
+        /* CONTENITORE IMMAGINE STANDARD */
+        .book-cover-wrapper {
+            width: 180px;
+            height: 260px;
+            margin-bottom: 25px;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+            background-color: #eee;
+            flex-shrink: 0;
+        }
+        .book-cover-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Garantisce la stessa proporzione senza deformare l'immagine */
+            display: block;
+        }
+
+        /* INTESTAZIONE E TESTO */
+        .book-subtitle {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #c86823;
+            margin-bottom: 8px;
+        }
+        .book-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            color: #1a1a1a;
+            line-height: 1.25;
+            margin-bottom: 18px;
+            min-height: 2.5em; /* Mantiene i titoli allineati alla stessa altezza */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .book-description {
+            font-size: 0.95rem;
+            color: #4a4a4a;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            flex-grow: 1; /* Riempie lo spazio libero per spingere il bottone in fondo */
+        }
+        .book-description p {
+            margin-bottom: 12px;
+        }
+
+        /* BOTTONI ANCORATI IN BASSO */
+        .btn-container {
+            width: 100%;
+            margin-top: auto;
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            text-align: center;
+            padding: 13px 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: background-color 0.2s ease;
+        }
+        .btn-amazon {
+            background-color: #c86823;
+            color: #ffffff;
+        }
+        .btn-amazon:hover {
+            background-color: #b0571b;
+        }
+        .btn-kickstarter {
+            background-color: #05ce78;
+            color: #ffffff;
+        }
+        .btn-kickstarter:hover {
+            background-color: #04a761;
+        }
+
+        /* RESPONSIVE SMARTPHONE */
+        @media (max-width: 768px) {
+            .books-grid {
+                grid-template-columns: 1fr;
+            }
+            .book-title {
+                min-height: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVIGAZIONE SCURA -->
+    <header>
+        <nav>
+            <ul>
+                <li><a href="index.html">HOME</a></li>
+                <li><a href="chi-sono.html">CHI SONO</a></li>
+                <li><a href="libri.html" class="active">I MIEI LIBRI</a></li>
+                <li><a href="progetti.html">PROGETTI & INVENZIONI</a></li>
+                <li><a href="contatti.html">CONTATTI</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <!-- SEZIONE INTRODUTTIVA -->
+        <section class="intro-section">
+            <h1>Opere & Scrittura</h1>
+            <p>"Dalle riflessioni intime di un diario interattivo alle trame serrate di un thriller strategico: due modi diversi di esplorare la mente e le emozioni."</p>
+        </section>
+
+        <!-- GRIGLIA SCHEDE LIBRO -->
+        <div class="books-grid">
+
+            <!-- SCHEDA 1: L'ARTE DELLA SOLITUDINE -->
+            <article class="book-card">
+                <div class="book-cover-wrapper">
+                    <img src="img/copertina-solitudine.jpg" alt="Copertina L'Arte della Solitudine">
+                </div>
+                <span class="book-subtitle">Diario Interattivo</span>
+                <h2 class="book-title">L'Arte della Solitudine</h2>
+                <div class="book-description">
+                    <p>Un diario essenziale pensato per trasformare il tempo trascorso con se stessi in uno spazio di profonda introspezione. Non un semplice libro da leggere, ma un'esperienza da completare.</p>
+                    <p>Attraverso tracciamenti emotivi, schemi di riflessione e spazi bianchi guidati, il testo aiuta a rallentare il ritmo quotidiano e a riordinare i propri pensieri.</p>
+                </div>
+                <div class="btn-container">
+                    <a href="https://www.amazon.it/LArte-della-Solitudine-Frammenti-Pensieri/dp/B0HC7MF71Q/ref=sr_1_1?__mk_it_IT=%C3%85M%C3%85%C5%BD%C3%95%C3%91&crid=1PQ5IU1Z3T37V&dib=eyJ2IjoiMSJ9._H4AJY-836hpjA3vjafWib0c-VSG9Klv-kw2thYogqyzBWzyFnF-FCPklzbcq1m-c5zCyEcaJ3B2S3J3drR8cf7lJ16FjM2DSFQqO1OvWgjdGzXCix2pCq-gDQTJ8PLQvwo7hViFTKcffS8YJ6NQik9vhOrF72AZLyUprSCsF0c.i_cuMKJZwb1K4harEq_oqp4vHrtExanVBXqpnRsyl8M&dib_tag=se&keywords=l%27arte+della+solitudine&qid=1789301896&sprefix=l%27arte+della+solitudin%2Caps%2C228&sr=8-1" target="_blank" class="btn btn-amazon">Acquista su Amazon</a>
+                </div>
+            </article>
+
+            <!-- SCHEDA 2: DANIEL BELMONT -->
+            <article class="book-card">
+                <div class="book-cover-wrapper">
+                    <img src="img/copertina-belmont.jpg" alt="Copertina Daniel Belmont">
+                </div>
+                <span class="book-subtitle">Thriller Procedurale</span>
+                <h2 class="book-title">Daniel Belmont</h2>
+                <div class="book-description">
+                    <p>Un thriller giallo ad altissima tensione strategica e psicologica. Daniel Belmont è un investigatore analitico che non crede alle coincidenze e scompone i silenzi dei sospettati.</p>
+                    <p>In una corsa contro il tempo per svelare le ombre della Calveris Group, ogni dettaglio trascurato diventa una trappola e ogni omissione una chiave di lettura.</p>
+                </div>
+                <div class="btn-container">
+                    <a href="https://www.kickstarter.com/projects/davideguerra/daniel-belmont-il-giorno-in-cui-nessuno-ha-chiamato?ref=57t4i7" target="_blank" class="btn btn-kickstarter">Sostieni su Kickstarter</a>
+                </div>
+            </article>
+
+        </div>
+    </main>
+
+</body>
+</html>

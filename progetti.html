@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Progetti & Invenzioni - Davide Guerra</title>
+    <!-- Import Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f6f4ee;
+            color: #2b2b2b;
+            line-height: 1.6;
+        }
+
+        /* HEADER E NAVIGAZIONE */
+        header {
+            background-color: #1c1c1c;
+            padding: 18px 0;
+            text-align: center;
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 35px;
+            flex-wrap: wrap;
+        }
+        nav a {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            transition: color 0.2s ease;
+        }
+        nav a:hover, nav a.active {
+            color: #c86823;
+        }
+
+        /* CONTENITORE PRINCIPALE */
+        main {
+            max-width: 900px;
+            margin: 80px auto;
+            padding: 0 20px;
+            text-align: center;
+        }
+
+        /* SEZIONE TITOLO */
+        .projects-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 15px;
+        }
+        .projects-header p {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 1.15rem;
+            color: #555555;
+            margin-bottom: 50px;
+        }
+
+        /* CARD SPOILER CENTRALE */
+        .spoiler-card {
+            background-color: #ffffff;
+            border: 2px solid #c86823;
+            border-radius: 10px;
+            padding: 50px 40px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .spoiler-card h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: #1a1a1a;
+            margin-bottom: 20px;
+        }
+        .spoiler-card p {
+            font-size: 1rem;
+            color: #4a4a4a;
+            line-height: 1.7;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .spoiler-card {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVIGAZIONE SCURA -->
+    <header>
+        <nav>
+            <ul>
+                <li><a href="index.html">HOME</a></li>
+                <li><a href="chi-sono.html">CHI SONO</a></li>
+                <li><a href="libri.html">I MIEI LIBRI</a></li>
+                <li><a href="progetti.html" class="active">PROGETTI & INVENZIONI</a></li>
+                <li><a href="contatti.html">CONTATTI</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <!-- INTESTAZIONE -->
+        <section class="projects-header">
+            <h1>Progetti & Invenzioni</h1>
+            <p>"Smontare le cose per migliorarle, immaginarne di nuove per realizzarle."</p>
+        </section>
+
+        <!-- CONTENITORE SPOILER -->
+        <section class="spoiler-card">
+            <h2>Qualcosa di nuovo è in arrivo...</h2>
+            <p>Questo spazio è riservato alle prossime idee, ai prototipi e alle invenzioni in corso di sviluppo. I nuovi progetti verranno svelati e pubblicati qui non appena saranno pronti a vedere la luce. Resta sintonizzato.</p>
+        </section>
+    </main>
+
+</body>
+</html>

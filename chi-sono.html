@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi Sono | La mia Officina delle Idee</title>
+    <style>
+        /* Manteniamo gli stessi colori della Home */
+        :root {
+            --sfondo-carta: #F4F1EA; 
+            --testo-scuro: #2C2C2C;
+            --colore-accento: #B85D19; 
+            --sfondo-scuro: #1A1A1A;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Georgia', serif;
+            background-color: var(--sfondo-carta);
+            color: var(--testo-scuro);
+            line-height: 1.6;
+        }
+
+        /* STESSO MENU DELLA HOME */
+        nav {
+            background-color: var(--sfondo-scuro);
+            padding: 15px 0;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-family: 'Arial', sans-serif;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--colore-accento);
+        }
+
+        /* LAYOUT SPECIFICO PER LA PAGINA CHI SONO */
+        .contenitore-testo {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 40px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border-top: 4px solid var(--colore-accento);
+        }
+
+        .contenitore-testo h1 {
+            font-size: 2.5rem;
+            color: var(--sfondo-scuro);
+            margin-top: 0;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .contenitore-testo h2 {
+            font-size: 1.5rem;
+            color: var(--colore-accento);
+            margin-top: 40px;
+            margin-bottom: 15px;
+        }
+
+        .contenitore-testo p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        footer {
+            background-color: var(--sfondo-scuro);
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            font-family: 'Arial', sans-serif;
+            font-size: 12px;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- MENU: Ora se clicchi "Home" tornerai alla pagina principale! -->
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="chi-sono.html">Chi Sono</a>
+        <a href="libri.html">I Miei Libri</a>
+        <a href="progetti.html">Progetti & Invenzioni</a>
+        <a href="contatti.html">Contatti</a>
+    </nav>
+
+    <div class="contenitore-testo">
+        <h1>Chi Sono</h1>
+        
+        <p>Sono nato il 25 luglio 2004 a Foggia. Fin da piccolo, la mia mente è sempre stata in costante movimento, spinta da un'attitudine precisa: non mi è mai interessato tanto inventare cose dal nulla, quanto piuttosto <strong>migliorare ciò che già esiste</strong>.</p>
+        
+        <h2>L'arte di aggiustare</h2>
+        <p>Smontare oggetti rotti, capirne i meccanismi interni e ridare loro vita è sempre stata la mia più grande passione. Nel tempo, crescendo, ho sviluppato nuove capacità pratiche e organizzative che oggi mi permettono di riprendere in mano i miei sogni infantili e trasformarli in realtà tangibili. Uno dei traguardi che ho in cantiere? Progettare e realizzare un mio orologio personale, unendo precisione tecnica e creatività.</p>
+        
+        <h2>Dall'osservazione alla pagina scritta</h2>
+        <p>Questa stessa lente di ingrandimento, che uso per studiare i meccanismi degli oggetti, la applico alla vita e alle persone. Mi piace catturare le dinamiche quotidiane, dai comportamenti umani fino alle piccole situazioni universali, e analizzarle a fondo. Da qui è nato il mio primo libro: un progetto nato come un diario intimo in cui raccoglievo esperienze vissute e raccontate, e che ho poi distillato in brevi riflessioni affinché ogni lettore potesse specchiarvi la propria esperienza.</p>
+
+        <h2>Sogni in cantiere</h2>
+        <p>Oggi sto canalizzando queste due anime — quella logica e quella narrativa — su piattaforme come Kickstarter, lavorando a progetti che spaziano dall'editoria (con pubblicazioni bilingue) al design puro. E questo è solo l'inizio.</p>
+    </div>
+
+    <footer>
+        <p>&copy; 2026. Creato con passione. Tutti i diritti riservati.</p>
+    </footer>
+
+</body>
+</html>

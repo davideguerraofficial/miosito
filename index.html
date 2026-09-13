@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La mia Officina delle Idee | Scrittore & Creatore</title>
+    <style>
+        /* IMPOSTAZIONI GENERALI (Colori e Font) */
+        :root {
+            --sfondo-carta: #F4F1EA; /* Color avorio elegante */
+            --testo-scuro: #2C2C2C;
+            --colore-accento: #B85D19; /* Ruggine/Bronzo */
+            --sfondo-scuro: #1A1A1A;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Georgia', serif; /* Font classico ed elegante per scrittori */
+            background-color: var(--sfondo-carta);
+            color: var(--testo-scuro);
+            line-height: 1.6;
+        }
+
+        /* MENU DI NAVIGAZIONE */
+        nav {
+            background-color: var(--sfondo-scuro);
+            padding: 15px 0;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-family: 'Arial', sans-serif;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--colore-accento);
+        }
+
+        /* SEZIONE EROE (Hero Section) */
+        .hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+        .foto-profilo {
+            width: 200px;
+            height: 200px;
+            background-color: #ddd; /* Questo è il segnaposto per la tua foto */
+            border-radius: 50%;
+            border: 4px solid var(--colore-accento);
+            margin-bottom: 20px;
+            object-fit: cover;
+            /* Quando avrai la foto, cambieremo questo div in un tag <img> */
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin: 0 0 10px 0;
+            color: var(--sfondo-scuro);
+        }
+
+        .hero h2 {
+            font-size: 1.2rem;
+            font-weight: normal;
+            font-style: italic;
+            color: #555;
+            max-width: 600px;
+            margin-bottom: 30px;
+        }
+
+        /* GRIGLIA DEI PROGETTI (Due colonne) */
+        .progetti-container {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            padding: 40px 20px 80px 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+        }
+
+        .card-progetto {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            width: 400px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border-top: 4px solid var(--colore-accento);
+        }
+
+        .card-progetto h3 {
+            margin-top: 0;
+            font-size: 1.5rem;
+        }
+
+        .bottone {
+            display: inline-block;
+            background-color: var(--colore-accento);
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-family: 'Arial', sans-serif;
+            font-size: 14px;
+            margin-top: 15px;
+            transition: background 0.3s;
+        }
+
+        .bottone:hover {
+            background-color: #964a13;
+        }
+
+        /* FOOTER */
+        footer {
+            background-color: var(--sfondo-scuro);
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            font-family: 'Arial', sans-serif;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- MENU -->
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="chi-sono.html">Chi Sono</a>
+        <a href="libri.html">I Miei Libri</a>
+        <a href="progetti.html">Progetti & Invenzioni</a>
+        <a href="contatti.html">Contatti</a>
+    </nav>
+
+    <!-- SEZIONE PRINCIPALE -->
+    <section class="hero">
+        <!-- Spazio per la tua foto -->
+        <img src="profilo.jpeg" class="foto-profilo" alt="La mia foto profilo"> 
+        
+        <h1>Davide Guerra</h1>
+        <h2>"Osservo il mondo per scriverlo, smonto le cose per migliorarle."</h2>
+        <a href="chi-sono.html" class="bottone">Scopri la mia storia</a>
+    </section>
+
+    <!-- I DUE MONDI (Scrittura e Progetti) -->
+    <section class="progetti-container">
+        
+        <!-- Blocco Libro -->
+        <div class="card-progetto">
+            <h3>L'Arte della Solitudine</h3>
+            <p>Da un diario personale a una riflessione universale. Un viaggio introspettivo, disponibile in italiano e inglese, dove i pensieri intimi si trasformano in frasi in cui chiunque può ritrovarsi.</p>
+            <a href="libri.html" class="bottone">Leggi un estratto</a>
+        </div>
+
+        <!-- Blocco Kickstarter / Investigazione -->
+        <div class="card-progetto">
+            <h3>Il mondo di Daniel Belmont</h3>
+            <p>Un'investigazione intelligente e furba, ma profondamente umana. Segui lo sviluppo del mio nuovo progetto editoriale e scopri i miei prossimi obiettivi su Kickstarter, dalla scrittura alla creazione di orologi.</p>
+            <a href="libri.html" class="bottone">Scopri su Kickstarter</a>
+        </div>
+
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>&copy; 2026. Creato con passione. Tutti i diritti riservati.</p>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contatti - Davide Guerra</title>
+    <!-- Import Google Fonts e FontAwesome per le icone dei social -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f6f4ee;
+            color: #2b2b2b;
+            line-height: 1.6;
+        }
+
+        /* HEADER E NAVIGAZIONE */
+        header {
+            background-color: #1c1c1c;
+            padding: 18px 0;
+            text-align: center;
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 35px;
+            flex-wrap: wrap;
+        }
+        nav a {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            transition: color 0.2s ease;
+        }
+        nav a:hover, nav a.active {
+            color: #c86823;
+        }
+
+        /* CONTENITORE PRINCIPALE */
+        main {
+            max-width: 800px;
+            margin: 60px auto;
+            padding: 0 20px;
+            text-align: center;
+        }
+
+        /* SEZIONE TITOLO */
+        .contacts-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 15px;
+        }
+        .contacts-header p {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 1.15rem;
+            color: #555555;
+            margin-bottom: 40px;
+        }
+
+        /* CARD CONTATTI PRINCIPALE */
+        .contact-card {
+            background-color: #ffffff;
+            border: 2px solid #c86823;
+            border-radius: 10px;
+            padding: 40px 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            margin-bottom: 30px;
+        }
+
+        /* BLOCCO EMAIL (In primo piano) */
+        .email-section {
+            margin-bottom: 35px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid #eaeaea;
+        }
+        .email-section h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            color: #1a1a1a;
+            margin-bottom: 10px;
+        }
+        .email-link {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #c86823;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+        .email-link:hover {
+            opacity: 0.8;
+            text-decoration: underline;
+        }
+
+        /* BLOCCO LINKTREE */
+        .linktree-section {
+            margin-bottom: 35px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid #eaeaea;
+        }
+        .linktree-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background-color: #2bb673; /* Verde Linktree */
+            color: #ffffff;
+            padding: 12px 25px;
+            border-radius: 6px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: background-color 0.2s;
+        }
+        .linktree-btn:hover {
+            background-color: #249961;
+        }
+
+        /* GRIGLIA SOCIAL E PIATTAFORME */
+        .social-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        .social-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 12px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-decoration: none;
+            color: #ffffff;
+            transition: transform 0.2s, opacity 0.2s;
+        }
+        .social-btn:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
+
+        /* Colori specifici per brand */
+        .btn-instagram { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+        .btn-facebook { background-color: #1877f2; }
+        .btn-amazon { background-color: #ff9900; color: #111111; }
+        .btn-kickstarter { background-color: #05ce78; }
+
+        /* RESPONSIVE */
+        @media (max-width: 600px) {
+            .social-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVIGAZIONE SCURA -->
+    <header>
+        <nav>
+            <ul>
+                <li><a href="index.html">HOME</a></li>
+                <li><a href="chi-sono.html">CHI SONO</a></li>
+                <li><a href="libri.html">I MIEI LIBRI</a></li>
+                <li><a href="progetti.html">PROGETTI & INVENZIONI</a></li>
+                <li><a href="contatti.html" class="active">CONTATTI</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <!-- INTESTAZIONE -->
+        <section class="contacts-header">
+            <h1>Contatti & Social</h1>
+            <p>"Scrivimi per informazioni, collaborazioni o per seguire i miei canali ufficiali."</p>
+        </section>
+
+        <!-- CARD PRINCIPALE -->
+        <div class="contact-card">
+
+            <!-- 1. EMAIL IN PRIMO PIANO -->
+            <div class="email-section">
+                <h2>Contatto Diretto (Email)</h2>
+                <a href="mailto:davidebook22@gmail.com" class="email-link">davidebook22@gmail.com</a>
+            </div>
+
+            <!-- 2. LINKTREE -->
+            <div class="linktree-section">
+                <a href="https://linktr.ee/d.book" target="_blank" class="linktree-btn">
+                    <i class="fa-solid fa-tree"></i> Apri il mio Linktree
+                </a>
+            </div>
+
+            <!-- 3. PULSANTI SOCIAL E PIATTAFORME CON LOGHI -->
+            <div class="social-grid">
+                <a href="https://www.instagram.com/davideguerra.official?stkn=NWtqZDl1Y2s4Mnpx" target="_blank" class="social-btn btn-instagram">
+                    <i class="fa-brands fa-instagram"></i> Instagram
+                </a>
+                <a href="https://www.facebook.com/share/1Hp22sPPoG/" target="_blank" class="social-btn btn-facebook">
+                    <i class="fa-brands fa-facebook-f"></i> Facebook
+                </a>
+                <a href="https://www.amazon.it/stores/author/B0HCJ5V9YF/about" target="_blank" class="social-btn btn-amazon">
+                    <i class="fa-brands fa-amazon"></i> Amazon
+                </a>
+                <a href="https://www.kickstarter.com/profile/davideguerra/about" target="_blank" class="social-btn btn-kickstarter">
+                    <i class="fa-solid fa-k"></i> Kickstarter
+                </a>
+            </div>
+
+        </div>
+    </main>
+
+</body>
+</html>
