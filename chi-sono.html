@@ -1,124 +1,139 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chi Sono | La mia Officina delle Idee</title>
-    <style>
-        /* Manteniamo gli stessi colori della Home */
-        :root {
-            --sfondo-carta: #F4F1EA; 
-            --testo-scuro: #2C2C2C;
-            --colore-accento: #B85D19; 
-            --sfondo-scuro: #1A1A1A;
-        }
-
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Georgia', serif;
-            background-color: var(--sfondo-carta);
-            color: var(--testo-scuro);
-            line-height: 1.6;
-        }
-
-        /* STESSO MENU DELLA HOME */
-        nav {
-            background-color: var(--sfondo-scuro);
-            padding: 15px 0;
-            text-align: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        nav a {
-            color: white;
-            text-decoration: none;
-            margin: 0 15px;
-            font-family: 'Arial', sans-serif;
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: color 0.3s;
-        }
-
-        nav a:hover {
-            color: var(--colore-accento);
-        }
-
-        /* LAYOUT SPECIFICO PER LA PAGINA CHI SONO */
-        .contenitore-testo {
-            max-width: 800px;
-            margin: 50px auto;
-            padding: 40px;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            border-top: 4px solid var(--colore-accento);
-        }
-
-        .contenitore-testo h1 {
-            font-size: 2.5rem;
-            color: var(--sfondo-scuro);
-            margin-top: 0;
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .contenitore-testo h2 {
-            font-size: 1.5rem;
-            color: var(--colore-accento);
-            margin-top: 40px;
-            margin-bottom: 15px;
-        }
-
-        .contenitore-testo p {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            margin-bottom: 20px;
-        }
-
-        footer {
-            background-color: var(--sfondo-scuro);
-            color: white;
-            text-align: center;
-            padding: 20px 0;
-            font-family: 'Arial', sans-serif;
-            font-size: 12px;
-            margin-top: 50px;
-        }
-    </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Davide Guerra — autore e creatore. Libri, progetti in sviluppo e campagne Kickstarter.">
+  <title>Davide Guerra — Autore e creatore</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23111a1e'/%3E%3Cpath d='M16 16h32v32H16z' fill='none' stroke='%23d8bd91' stroke-width='2'/%3E%3Ctext x='32' y='40' fill='%23f4f0e8' font-family='Georgia,serif' font-size='22' text-anchor='middle'%3EDG%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" referrerpolicy="no-referrer">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
-    <!-- MENU: Ora se clicchi "Home" tornerai alla pagina principale! -->
-    <nav>
-        <a href="index.html">Home</a>
-        <a href="chi-sono.html">Chi Sono</a>
-        <a href="libri.html">I Miei Libri</a>
-        <a href="progetti.html">Progetti & Invenzioni</a>
-        <a href="contatti.html">Contatti</a>
-    </nav>
-
-    <div class="contenitore-testo">
-        <h1>Chi Sono</h1>
-        
-        <p>Sono nato il 25 luglio 2004 a Foggia. Fin da piccolo, la mia mente è sempre stata in costante movimento, spinta da un'attitudine precisa: non mi è mai interessato tanto inventare cose dal nulla, quanto piuttosto <strong>migliorare ciò che già esiste</strong>.</p>
-        
-        <h2>L'arte di aggiustare</h2>
-        <p>Smontare oggetti rotti, capirne i meccanismi interni e ridare loro vita è sempre stata la mia più grande passione. Nel tempo, crescendo, ho sviluppato nuove capacità pratiche e organizzative che oggi mi permettono di riprendere in mano i miei sogni infantili e trasformarli in realtà tangibili. Uno dei traguardi che ho in cantiere? Progettare e realizzare un mio orologio personale, unendo precisione tecnica e creatività.</p>
-        
-        <h2>Dall'osservazione alla pagina scritta</h2>
-        <p>Questa stessa lente di ingrandimento, che uso per studiare i meccanismi degli oggetti, la applico alla vita e alle persone. Mi piace catturare le dinamiche quotidiane, dai comportamenti umani fino alle piccole situazioni universali, e analizzarle a fondo. Da qui è nato il mio primo libro: un progetto nato come un diario intimo in cui raccoglievo esperienze vissute e raccontate, e che ho poi distillato in brevi riflessioni affinché ogni lettore potesse specchiarvi la propria esperienza.</p>
-
-        <h2>Sogni in cantiere</h2>
-        <p>Oggi sto canalizzando queste due anime — quella logica e quella narrativa — su piattaforme come Kickstarter, lavorando a progetti che spaziano dall'editoria (con pubblicazioni bilingue) al design puro. E questo è solo l'inizio.</p>
+  <a class="skip-link" href="#main-content">Vai al contenuto</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="index.html" aria-label="Davide Guerra, home"><span class="brand-mark">DG</span><span>Davide Guerra</span></a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-navigation" aria-label="Apri il menu"><i class="fa-solid fa-bars" aria-hidden="true"></i></button>
+      <nav class="site-nav" id="main-navigation" aria-label="Navigazione principale">
+        <ul>
+          <li><a href="index.html" aria-current="page">Home</a></li>
+          <li><a href="chi-sono.html">Autore</a></li>
+          <li><a href="libri.html">Opere</a></li>
+          <li><a href="progetti.html">Progetti</a></li>
+          <li><a href="contatti.html">Contatti</a></li>
+        </ul>
+      </nav>
     </div>
+  </header>
 
-    <footer>
-        <p>&copy; 2026. Creato con passione. Tutti i diritti riservati.</p>
-    </footer>
+  <main id="main-content">
+    <section class="home-hero" aria-labelledby="hero-title">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">Autore · Creatore</p>
+          <h1 class="display" id="hero-title">Storie, oggetti,<br><em>idee da riportare alla luce.</em></h1>
+          <p class="lead">Davide Guerra costruisce mondi sulla pagina e progetti che chiedono di diventare reali. Ogni intuizione parte da un dettaglio osservato bene, poi prende una strada tutta sua.</p>
+          <div class="hero-actions">
+            <a class="button button--light" href="libri.html">Esplora le opere</a>
+            <a class="button button--outline" href="progetti.html">Entra nell'officina</a>
+          </div>
+        </div>
+        <div class="hero-image-wrap">
+          <img class="hero-image" src="img/profilo.jpeg" alt="Ritratto di Davide Guerra">
+          <div class="hero-caption">Una mente al lavoro,<br>fra pagine e possibilità.</div>
+        </div>
+      </div>
+    </section>
 
+    <section class="section featured-works" aria-labelledby="works-title">
+      <div class="section-inner">
+        <div class="section-header">
+          <div>
+            <p class="eyebrow">In primo piano</p>
+            <h2 class="section-title" id="works-title">Due storie già in cammino.</h2>
+          </div>
+          <p class="lead">Una nasce dal silenzio e dalle sue domande. L’altra segue le tracce, misura le omissioni, entra in una zona più inquieta.</p>
+        </div>
+        <div class="work-list">
+          <article class="work-row">
+            <span class="work-type">Riflessioni · Pubblicato</span>
+            <h3 class="work-name">L'Arte della<br>Solitudine</h3>
+            <div>
+              <p>Frammenti, pagine aperte e uno spazio per tornare ad ascoltarsi senza fretta.</p>
+              <a class="text-link" href="libri.html">Scopri l'opera <span aria-hidden="true">→</span></a>
+            </div>
+          </article>
+          <article class="work-row">
+            <span class="work-type">Thriller · In sviluppo</span>
+            <h3 class="work-name">Daniel<br>Belmont</h3>
+            <div>
+              <p>Un investigatore analitico, la Calveris Group e dettagli che restano addosso.</p>
+              <a class="text-link" href="libri.html#daniel-belmont">Segui il progetto <span aria-hidden="true">→</span></a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="dark-band section" aria-labelledby="directions-title">
+      <div class="section-inner">
+        <div class="section-header">
+          <div>
+            <p class="eyebrow">Un percorso aperto</p>
+            <h2 class="section-title" id="directions-title">La scrittura è solo una delle porte.</h2>
+          </div>
+          <p class="lead">L’idea può diventare un libro, un oggetto, un progetto da sostenere insieme. Il formato cambia; la curiosità resta al centro.</p>
+        </div>
+        <div class="three-columns">
+          <article class="concept">
+            <span class="concept-number">01</span>
+            <div><h3>Libri e universi narrativi</h3><p>Opere da leggere, mondi da approfondire, personaggi che continuano a lavorare sotto la superficie.</p></div>
+          </article>
+          <article class="concept">
+            <span class="concept-number">02</span>
+            <div><h3>Progetti da costruire</h3><p>Idee pratiche, design e prototipi: materie diverse, stessa attenzione per ciò che può essere migliorato.</p></div>
+          </article>
+          <article class="concept">
+            <span class="concept-number">03</span>
+            <div><h3>Kickstarter come laboratorio</h3><p>Uno spazio per far incontrare un progetto e le persone che scelgono di accompagnarlo fin dall’inizio.</p></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="about-title">
+      <div class="section-inner editorial-grid">
+        <div class="editorial-image"><img src="img/copertina-solitudine.jpg" alt="Copertina del libro L'Arte della Solitudine"></div>
+        <div class="editorial-copy">
+          <p class="eyebrow">L'autore</p>
+          <h2 class="section-title" id="about-title">Dalle cose da aggiustare alle idee da finire.</h2>
+          <p>Nato a Foggia nel 2004, Davide torna ai progetti lasciati in sospeso nei pomeriggi liberi dal lavoro. È lì che il gesto diventa concreto: una storia viene terminata, un concetto prende forma, un’intuizione smette di restare solo un pensiero.</p>
+          <a class="text-link" href="chi-sono.html">Leggi la sua storia <span aria-hidden="true">→</span></a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div><a class="brand" href="index.html"><span class="brand-mark">DG</span><span>Davide Guerra</span></a><p class="footer-note">Autore e creatore. Libri, progetti, idee in cammino.</p></div>
+        <div class="footer-links" aria-label="Canali ufficiali">
+          <a class="social-icon" href="https://linktr.ee/d.book" target="_blank" rel="noopener noreferrer" aria-label="Linktree"><i class="fa-solid fa-tree" aria-hidden="true"></i></a>
+          <a class="social-icon" href="https://www.instagram.com/davideguerra.official?stkn=NWtqZDl1Y2s4Mnpx" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a>
+          <a class="social-icon" href="https://www.facebook.com/share/1Hp22sPPoG/" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fa-brands fa-facebook-f" aria-hidden="true"></i></a>
+          <a class="social-icon" href="https://www.amazon.it/stores/author/B0HCJ5V9YF/about" target="_blank" rel="noopener noreferrer" aria-label="Amazon"><i class="fa-brands fa-amazon" aria-hidden="true"></i></a>
+          <a class="social-icon" href="https://www.kickstarter.com/profile/davideguerra/about" target="_blank" rel="noopener noreferrer" aria-label="Kickstarter"><i class="fa-brands fa-kickstarter-k" aria-hidden="true"></i></a>
+          <a class="social-icon" href="https://www.goodreads.com/user/show/203160175-davide-guerra" target="_blank" rel="noopener noreferrer" aria-label="Goodreads"><i class="fa-brands fa-goodreads-g" aria-hidden="true"></i></a>
+        </div>
+      </div>
+      <div class="footer-bottom"><span>© 2026 Davide Guerra</span><a href="mailto:davideguerra.official@gmail.com">davideguerra.official@gmail.com</a></div>
+    </div>
+  </footer>
+  <script src="script.js"></script>
 </body>
 </html>
