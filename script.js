@@ -34,10 +34,10 @@ function updateSwitcher() {
   switcher.setAttribute('aria-label', currentLanguage === 'en' ? 'Language selector' : 'Selettore lingua');
   switcher.innerHTML = `
     <button class="language-choice" type="button" data-language="it" aria-pressed="${currentLanguage === 'it'}" aria-label="Italiano">
-      <span class="language-flag" aria-hidden="true">🇮🇹</span><span class="language-name">IT</span>
+      <span class="language-flag" aria-hidden="true">🇮🇹</span><span class="language-name">ITA</span>
     </button>
     <button class="language-choice" type="button" data-language="en" aria-pressed="${currentLanguage === 'en'}" aria-label="English">
-      <span class="language-flag" aria-hidden="true">🇬🇧</span><span class="language-name">EN</span>
+      <span class="language-flag" aria-hidden="true">🇬🇧</span><span class="language-name">ENG</span>
     </button>`;
 }
 
@@ -95,6 +95,23 @@ function enhanceMotion(scope = document) {
   });
 }
 
+function setupReadingProgress() {
+  const progress = document.createElement('div');
+  progress.className = 'reading-progress';
+  progress.setAttribute('aria-hidden', 'true');
+  document.body.append(progress);
+
+  const updateProgress = () => {
+    const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const position = scrollableHeight > 0 ? Math.min(window.scrollY / scrollableHeight, 1) : 0;
+    progress.style.transform = `scaleX(${position})`;
+  };
+
+  window.addEventListener('scroll', updateProgress, { passive: true });
+  window.addEventListener('resize', updateProgress);
+  updateProgress();
+}
+
 async function changeLanguage(language, initialLoad = false) {
   if (language === currentLanguage && !initialLoad) return;
 
@@ -142,3 +159,5 @@ if (toggle && nav) {
 
 if (currentLanguage === 'en' && !isLegacyEnglishPath) changeLanguage('en', true);
 else enhanceMotion();
+
+setupReadingProgress();
