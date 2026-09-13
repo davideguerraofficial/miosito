@@ -41,6 +41,21 @@ function updateSwitcher() {
     </button>`;
 }
 
+function ensureReviewsLink(language = currentLanguage) {
+  const navigationList = nav?.querySelector('ul');
+  if (!navigationList || navigationList.querySelector('[data-reviews-link]')) return;
+
+  const item = document.createElement('li');
+  const link = document.createElement('a');
+  link.href = 'recensioni.html';
+  link.textContent = language === 'en' ? 'Reviews' : 'Recensioni';
+  link.dataset.reviewsLink = 'true';
+  if (pageName === 'recensioni.html') link.setAttribute('aria-current', 'page');
+  item.append(link);
+
+  navigationList.insertBefore(item, navigationList.lastElementChild);
+}
+
 function copyPageContent(source, language) {
   const sourceMain = source.querySelector('main');
   const currentMain = document.querySelector('main');
@@ -59,6 +74,7 @@ function copyPageContent(source, language) {
 
   currentMain.replaceWith(nextMain);
   if (sourceNavigation && currentNavigation) currentNavigation.replaceWith(sourceNavigation.cloneNode(true));
+  ensureReviewsLink(language);
 
   document.documentElement.lang = language;
   document.title = source.title;
@@ -76,7 +92,7 @@ function copyPageContent(source, language) {
 function enhanceMotion(scope = document) {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-  const elements = [...scope.querySelectorAll('.hero-copy, .hero-image-wrap, .section-header, .work-row, .concept, .book-feature, .project-card, .contact-layout, .kickstarter-callout')]
+  const elements = [...scope.querySelectorAll('.hero-copy, .hero-image-wrap, .section-header, .work-row, .concept, .book-feature, .review-category, .review-card, .project-card, .contact-layout, .kickstarter-callout')]
     .filter((element) => !element.dataset.motionReady);
 
   const observer = new IntersectionObserver((entries, currentObserver) => {
@@ -141,6 +157,7 @@ if (headerInner && toggle) {
   });
   headerInner.insertBefore(switcher, toggle);
   updateSwitcher();
+  ensureReviewsLink();
 }
 
 if (toggle && nav) {
