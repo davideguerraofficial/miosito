@@ -69,6 +69,30 @@ function copyPageContent(source, language) {
 
   const skipLink = document.querySelector('.skip-link');
   if (skipLink) skipLink.textContent = language === 'en' ? 'Skip to content' : 'Vai al contenuto';
+
+  enhanceMotion(nextMain);
+}
+
+function enhanceMotion(scope = document) {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  const elements = [...scope.querySelectorAll('.hero-copy, .hero-image-wrap, .section-header, .work-row, .concept, .book-feature, .project-card, .contact-layout, .kickstarter-callout')]
+    .filter((element) => !element.dataset.motionReady);
+
+  const observer = new IntersectionObserver((entries, currentObserver) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('is-visible');
+      currentObserver.unobserve(entry.target);
+    });
+  }, { threshold: 0.12 });
+
+  elements.forEach((element, index) => {
+    element.dataset.motionReady = 'true';
+    element.style.setProperty('--motion-delay', `${Math.min(index * 55, 220)}ms`);
+    element.classList.add('motion-reveal');
+    observer.observe(element);
+  });
 }
 
 async function changeLanguage(language, initialLoad = false) {
@@ -117,3 +141,4 @@ if (toggle && nav) {
 }
 
 if (currentLanguage === 'en' && !isLegacyEnglishPath) changeLanguage('en', true);
+else enhanceMotion();

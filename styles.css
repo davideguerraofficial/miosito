@@ -323,6 +323,30 @@ button, a { -webkit-tap-highlight-color: transparent; }
   filter: saturate(0.82) contrast(1.04);
 }
 
+@media (prefers-reduced-motion: no-preference) {
+  .hero-image { animation: portrait-drift 10s ease-in-out infinite; }
+
+  .motion-reveal {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+
+  .motion-reveal.is-visible {
+    animation: reveal-up 680ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: var(--motion-delay, 0ms);
+  }
+}
+
+@keyframes portrait-drift {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-8px) scale(1.012); }
+}
+
+@keyframes reveal-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 .hero-caption {
   position: absolute;
   z-index: 1;
@@ -500,8 +524,14 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .language-choice { padding: 7px; }
   .language-name { display: none; }
   .site-nav { top: 66px; }
-  .display { font-size: clamp(3rem, 17vw, 5.1rem); }
+  .display { font-size: clamp(2.8rem, 13vw, 3.85rem); line-height: 0.9; }
+  .section-title { font-size: clamp(2.35rem, 11vw, 3.35rem); }
+  .hero-copy { padding-top: 53px; }
+  .hero-copy .lead { font-size: 1rem; line-height: 1.68; }
+  .hero-actions { display: grid; grid-template-columns: 1fr; max-width: 290px; }
+  .hero-actions .button { width: 100%; }
   .hero-image-wrap { padding: 0 0 25px 25px; }
+  .hero-image-wrap { width: min(88%, 360px); }
   .hero-image-wrap::before { inset: 25px 25px 0 0; }
   .hero-caption { max-width: 190px; font-size: 0.93rem; }
   .work-row { grid-template-columns: 1fr; gap: 10px; padding: 27px 0; }
@@ -511,6 +541,9 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .book-cover { width: min(80%, 300px); }
   .book-cover::before { top: 18px; right: -17px; bottom: -18px; left: 17px; }
   .book-copy h2 { font-size: clamp(3.2rem, 15vw, 4.65rem); }
+  .book-copy p { font-size: 0.98rem; line-height: 1.72; }
+  .book-actions { display: grid; }
+  .book-actions .button { width: 100%; }
   .project-card { padding: 26px; }
   .email-address { font-size: 1.95rem; word-break: break-word; }
   .footer-bottom { display: grid; }
