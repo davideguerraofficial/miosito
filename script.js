@@ -43,17 +43,23 @@ function updateSwitcher() {
 
 function ensureReviewsLink(language = currentLanguage) {
   const navigationList = nav?.querySelector('ul');
-  if (!navigationList || navigationList.querySelector('[data-reviews-link]')) return;
+  if (!navigationList) return;
 
-  const item = document.createElement('li');
-  const link = document.createElement('a');
-  link.href = 'recensioni.html';
-  link.textContent = language === 'en' ? 'Reviews' : 'Recensioni';
-  link.dataset.reviewsLink = 'true';
-  if (pageName === 'recensioni.html') link.setAttribute('aria-current', 'page');
-  item.append(link);
+  let link = navigationList.querySelector('[data-reviews-link]');
+  if (!link) {
+    const item = document.createElement('li');
+    link = document.createElement('a');
+    link.href = 'recensioni.html';
+    link.textContent = language === 'en' ? 'Reviews' : 'Recensioni';
+    link.dataset.reviewsLink = 'true';
+    if (pageName === 'recensioni.html') link.setAttribute('aria-current', 'page');
+    item.append(link);
+    navigationList.insertBefore(item, navigationList.lastElementChild);
+  }
 
-  navigationList.insertBefore(item, navigationList.lastElementChild);
+  link.dataset.navIndex = '0.05';
+  const contactLink = navigationList.querySelector('a[href="contatti.html"]');
+  if (contactLink) contactLink.dataset.navIndex = '0.08';
 }
 
 function copyPageContent(source, language) {
@@ -92,7 +98,7 @@ function copyPageContent(source, language) {
 function enhanceMotion(scope = document) {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-  const elements = [...scope.querySelectorAll('.hero-copy, .hero-image-wrap, .section-header, .work-row, .concept, .book-feature, .review-category, .review-card, .project-card, .contact-layout, .kickstarter-callout')]
+  const elements = [...scope.querySelectorAll('.hero-copy, .hero-image-wrap, .section-header, .work-row, .concept, .book-feature, .review-category, .review-card, .voice-card, .project-card, .contact-layout, .kickstarter-callout')]
     .filter((element) => !element.dataset.motionReady);
 
   const observer = new IntersectionObserver((entries, currentObserver) => {
