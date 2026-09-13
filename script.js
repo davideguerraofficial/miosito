@@ -57,9 +57,31 @@ function ensureReviewsLink(language = currentLanguage) {
     navigationList.insertBefore(item, navigationList.lastElementChild);
   }
 
-  link.dataset.navIndex = '0.05';
-  const contactLink = navigationList.querySelector('a[href="contatti.html"]');
-  if (contactLink) contactLink.dataset.navIndex = '0.08';
+}
+
+function ensureFavicon() {
+  if (document.querySelector('link[rel="icon"]')) return;
+
+  const icon = document.createElement('link');
+  icon.rel = 'icon';
+  icon.type = 'image/svg+xml';
+  icon.href = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23111a1e'/%3E%3Ctext x='32' y='41' fill='%23f4f0e8' font-family='Georgia' font-size='22' text-anchor='middle'%3EDG%3C/text%3E%3C/svg%3E";
+  document.head.append(icon);
+}
+
+function normalizePageNumber(language = currentLanguage) {
+  const pages = {
+    'recensioni.html': { number: '05', italian: 'Recensioni', english: 'Reviews' },
+    'contatti.html': { number: '06', italian: 'Contatti', english: 'Contact' }
+  };
+  const page = pages[pageName];
+  if (!page) return;
+
+  const label = language === 'en' ? page.english : page.italian;
+  const eyebrow = document.querySelector('.page-intro .eyebrow');
+  const index = document.querySelector('.page-intro .page-index');
+  if (eyebrow) eyebrow.textContent = `${page.number} · ${label}`;
+  if (index) index.textContent = page.number;
 }
 
 function copyPageContent(source, language) {
@@ -92,6 +114,7 @@ function copyPageContent(source, language) {
   const skipLink = document.querySelector('.skip-link');
   if (skipLink) skipLink.textContent = language === 'en' ? 'Skip to content' : 'Vai al contenuto';
 
+  normalizePageNumber(language);
   enhanceMotion(nextMain);
 }
 
@@ -183,4 +206,6 @@ if (toggle && nav) {
 if (currentLanguage === 'en' && !isLegacyEnglishPath) changeLanguage('en', true);
 else enhanceMotion();
 
+ensureFavicon();
+normalizePageNumber();
 setupReadingProgress();
