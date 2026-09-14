@@ -50,7 +50,7 @@
       </div>
     </section>
 
-    <section class="section updates-feed">
+    <section class="section updates-feed" id="diario">
       <div class="section-inner updates-feed-inner" data-updates-feed>
         <div class="updates-feed-header">
           <div><p class="eyebrow">In ordine di tempo</p><h2>Ultimi aggiornamenti.</h2></div>
@@ -61,6 +61,10 @@
             <button class="update-filter" type="button" data-update-filter="all" aria-pressed="true">Tutti</button>
             <button class="update-filter" type="button" data-update-filter="books" aria-pressed="false">Libri</button>
             <button class="update-filter" type="button" data-update-filter="kickstarter" aria-pressed="false">Kickstarter</button>
+          </div>
+          <div class="update-filters" aria-label="Filtra per anno">
+            <button class="update-filter" type="button" data-update-year="all" aria-pressed="true">Tutti gli anni</button>
+            <button class="update-filter" type="button" data-update-year="2026" aria-pressed="false">2026</button>
           </div>
           <label class="update-sort">Ordina per
             <select data-update-sort><option value="newest">Più recenti</option><option value="oldest">Meno recenti</option></select>
@@ -82,6 +86,8 @@
         <nav class="update-pagination" data-update-pagination aria-label="Paginazione aggiornamenti" hidden><button type="button" data-update-previous aria-label="Pagina precedente">←</button><span class="update-page-label" data-update-page-label>1 / 1</span><button type="button" data-update-next aria-label="Pagina successiva">→</button></nav>
       </div>
     </section>
+
+    <section class="section"><div class="section-inner updates-archive"><div class="updates-archive-header"><div><p class="eyebrow">Archivio annuale</p><h2>Il percorso,<br>anno dopo anno.</h2></div><p class="lead">Quando il diario crescerà, ogni anno conserverà le proprie voci senza appesantire la lettura del presente.</p></div><a class="archive-year" href="aggiornamenti.html?anno=2026#diario"><div><strong>2026</strong><p>Le prime tappe di libri, Kickstarter e progetti in movimento.</p></div><span>2 aggiornamenti →</span></a></div></section>
   </main>
 
   <footer class="site-footer"><div class="footer-inner"><div class="footer-top"><div><a class="brand" href="index.html"><span class="brand-mark">DG</span><span>Davide Guerra</span></a><p class="footer-note">Autore e creatore. Libri, progetti, idee in cammino.</p></div></div><div class="footer-bottom"><span>© 2026 Davide Guerra</span><a href="contatti.html">Contatti</a></div></div></footer>

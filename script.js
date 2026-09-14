@@ -156,7 +156,7 @@ function copyPageContent(source, language) {
 function enhanceMotion(scope = document) {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-  const elements = [...scope.querySelectorAll('.hero-copy, .hero-image-wrap, .section-header, .work-row, .concept, .book-feature, .review-category, .review-card, .voice-card, .project-card, .update-project, .update-entry, .contact-layout, .kickstarter-callout')]
+  const elements = [...scope.querySelectorAll('.hero-copy, .hero-image-wrap, .section-header, .work-row, .concept, .progress-project, .book-feature, .book-guide, .review-category, .review-card, .voice-card, .project-card, .update-project, .update-entry, .contact-layout, .kickstarter-feature, .kickstarter-step, .kickstarter-callout')]
     .filter((element) => !element.dataset.motionReady);
 
   const observer = new IntersectionObserver((entries, currentObserver) => {
@@ -200,6 +200,7 @@ function setupUpdatesFeed(scope = document) {
   const list = feed.querySelector('[data-update-list]');
   const entries = [...(list?.querySelectorAll('.update-entry') || [])];
   const filters = [...feed.querySelectorAll('[data-update-filter]')];
+  const yearFilters = [...feed.querySelectorAll('[data-update-year]')];
   const sort = feed.querySelector('[data-update-sort]');
   const pagination = feed.querySelector('[data-update-pagination]');
   const previous = feed.querySelector('[data-update-previous]');
@@ -208,12 +209,18 @@ function setupUpdatesFeed(scope = document) {
   const empty = feed.querySelector('[data-update-empty]');
   const limit = 10;
   let activeFilter = 'all';
+  const requestedYear = new URLSearchParams(window.location.search).get('anno');
+  let activeYear = yearFilters.some((button) => button.dataset.updateYear === requestedYear) ? requestedYear : 'all';
   let currentPage = 1;
 
   const render = () => {
     const newestFirst = sort?.value !== 'oldest';
     const visibleEntries = entries
-      .filter((entry) => activeFilter === 'all' || entry.dataset.category?.split(' ').includes(activeFilter))
+      .filter((entry) => {
+        const matchesCategory = activeFilter === 'all' || entry.dataset.category?.split(' ').includes(activeFilter);
+        const matchesYear = activeYear === 'all' || entry.dataset.date?.startsWith(activeYear);
+        return matchesCategory && matchesYear;
+      })
       .sort((first, second) => {
         const difference = new Date(second.dataset.date) - new Date(first.dataset.date);
         return newestFirst ? difference : -difference;
@@ -236,6 +243,19 @@ function setupUpdatesFeed(scope = document) {
       activeFilter = filter.dataset.updateFilter || 'all';
       currentPage = 1;
       filters.forEach((button) => button.setAttribute('aria-pressed', String(button === filter)));
+      render();
+    });
+  });
+  yearFilters.forEach((filter) => {
+    filter.setAttribute('aria-pressed', String(filter.dataset.updateYear === activeYear));
+    filter.addEventListener('click', () => {
+      activeYear = filter.dataset.updateYear || 'all';
+      currentPage = 1;
+      yearFilters.forEach((button) => button.setAttribute('aria-pressed', String(button === filter)));
+      const address = new URL(window.location.href);
+      if (activeYear === 'all') address.searchParams.delete('anno');
+      else address.searchParams.set('anno', activeYear);
+      window.history.replaceState({}, '', `${address.pathname}${address.search}${address.hash}`);
       render();
     });
   });
