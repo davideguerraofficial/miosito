@@ -122,6 +122,8 @@ function copyPageContent(source, language) {
   const currentMain = document.querySelector('main');
   const sourceNavigation = source.querySelector('.site-nav ul');
   const currentNavigation = nav?.querySelector('ul');
+  const sourceFooter = source.querySelector('.site-footer');
+  const currentFooter = document.querySelector('.site-footer');
 
   if (!sourceMain || !currentMain) throw new Error('Page content is unavailable.');
 
@@ -135,6 +137,7 @@ function copyPageContent(source, language) {
 
   currentMain.replaceWith(nextMain);
   if (sourceNavigation && currentNavigation) currentNavigation.replaceWith(sourceNavigation.cloneNode(true));
+  if (sourceFooter && currentFooter) currentFooter.replaceWith(sourceFooter.cloneNode(true));
   ensureUpdatesLink(language);
   ensureReviewsLink(language);
 
@@ -149,8 +152,42 @@ function copyPageContent(source, language) {
   if (skipLink) skipLink.textContent = language === 'en' ? 'Skip to content' : 'Vai al contenuto';
 
   normalizePageNumber(language);
+  setupPageAtmosphere();
   enhanceMotion(nextMain);
   setupUpdatesFeed(nextMain);
+}
+
+function setupPageAtmosphere() {
+  const atmosphereByPage = {
+    'chi-sono.html': 'author',
+    'libri.html': 'book',
+    'progetti.html': 'mechanism',
+    'kickstarter.html': 'signal',
+    'aggiornamenti.html': 'timeline',
+    'diario-arte-della-solitudine.html': 'timeline',
+    'diario-daniel-belmont.html': 'timeline',
+    'recensioni.html': 'quote',
+    'contatti.html': 'letter'
+  };
+  const kind = atmosphereByPage[pageName];
+  const host = document.querySelector('.page-intro');
+  if (!kind || !host || host.querySelector('.page-atmosphere')) return;
+
+  const visual = document.createElement('div');
+  visual.className = `page-atmosphere page-atmosphere--${kind}`;
+  visual.setAttribute('aria-hidden', 'true');
+
+  const shapes = {
+    author: '<span></span><span></span>',
+    book: '<span></span><span></span><span></span>',
+    mechanism: '<span></span><span></span>',
+    signal: '<span></span><span></span><span></span>',
+    timeline: '<span></span><span></span><span></span>',
+    quote: '<span>“</span><span>”</span>',
+    letter: '<span></span><span></span>'
+  };
+  visual.innerHTML = shapes[kind];
+  host.prepend(visual);
 }
 
 function enhanceMotion(scope = document) {
@@ -318,5 +355,6 @@ else enhanceMotion();
 ensureFavicon();
 setupWebAnalytics();
 normalizePageNumber();
+setupPageAtmosphere();
 setupReadingProgress();
 setupUpdatesFeed();
