@@ -4,6 +4,11 @@ const headerInner = document.querySelector('.header-inner');
 const pageName = window.location.pathname.split('/').pop() || 'index.html';
 const languageKey = 'davide-guerra-language';
 const isLegacyEnglishPath = /\/en\/?$/.test(window.location.pathname);
+const updatePageNames = new Set([
+  'aggiornamenti.html',
+  'diario-arte-della-solitudine.html',
+  'diario-daniel-belmont.html'
+]);
 
 function readLanguage() {
   try {
@@ -41,6 +46,24 @@ function updateSwitcher() {
     </button>`;
 }
 
+function ensureUpdatesLink(language = currentLanguage) {
+  const navigationList = nav?.querySelector('ul');
+  if (!navigationList) return;
+
+  let link = navigationList.querySelector('[data-updates-link]');
+  if (!link) {
+    const item = document.createElement('li');
+    link = document.createElement('a');
+    link.href = 'aggiornamenti.html';
+    link.textContent = language === 'en' ? 'Updates' : 'Aggiornamenti';
+    link.dataset.updatesLink = 'true';
+    if (updatePageNames.has(pageName)) link.setAttribute('aria-current', 'page');
+    item.append(link);
+    const reviewItem = navigationList.querySelector('[data-reviews-link]')?.closest('li');
+    navigationList.insertBefore(item, reviewItem || navigationList.lastElementChild);
+  }
+}
+
 function ensureReviewsLink(language = currentLanguage) {
   const navigationList = nav?.querySelector('ul');
   if (!navigationList) return;
@@ -56,7 +79,6 @@ function ensureReviewsLink(language = currentLanguage) {
     item.append(link);
     navigationList.insertBefore(item, navigationList.lastElementChild);
   }
-
 }
 
 function ensureFavicon() {
@@ -81,6 +103,7 @@ function setupWebAnalytics() {
 
 function normalizePageNumber(language = currentLanguage) {
   const pages = {
+    'aggiornamenti.html': { number: '04', italian: 'Aggiornamenti', english: 'Updates' },
     'recensioni.html': { number: '05', italian: 'Recensioni', english: 'Reviews' },
     'contatti.html': { number: '06', italian: 'Contatti', english: 'Contact' }
   };
@@ -112,6 +135,7 @@ function copyPageContent(source, language) {
 
   currentMain.replaceWith(nextMain);
   if (sourceNavigation && currentNavigation) currentNavigation.replaceWith(sourceNavigation.cloneNode(true));
+  ensureUpdatesLink(language);
   ensureReviewsLink(language);
 
   document.documentElement.lang = language;
@@ -126,12 +150,13 @@ function copyPageContent(source, language) {
 
   normalizePageNumber(language);
   enhanceMotion(nextMain);
+  setupUpdatesFeed(nextMain);
 }
 
 function enhanceMotion(scope = document) {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-  const elements = [...scope.querySelectorAll('.hero-copy, .hero-image-wrap, .section-header, .work-row, .concept, .book-feature, .review-category, .review-card, .voice-card, .project-card, .contact-layout, .kickstarter-callout')]
+  const elements = [...scope.querySelectorAll('.hero-copy, .hero-image-wrap, .section-header, .work-row, .concept, .book-feature, .review-category, .review-card, .voice-card, .project-card, .update-project, .update-entry, .contact-layout, .kickstarter-callout')]
     .filter((element) => !element.dataset.motionReady);
 
   const observer = new IntersectionObserver((entries, currentObserver) => {
@@ -167,6 +192,59 @@ function setupReadingProgress() {
   updateProgress();
 }
 
+function setupUpdatesFeed(scope = document) {
+  const feed = scope.querySelector('[data-updates-feed]');
+  if (!feed || feed.dataset.feedReady) return;
+  feed.dataset.feedReady = 'true';
+
+  const list = feed.querySelector('[data-update-list]');
+  const entries = [...(list?.querySelectorAll('.update-entry') || [])];
+  const filters = [...feed.querySelectorAll('[data-update-filter]')];
+  const sort = feed.querySelector('[data-update-sort]');
+  const pagination = feed.querySelector('[data-update-pagination]');
+  const previous = feed.querySelector('[data-update-previous]');
+  const next = feed.querySelector('[data-update-next]');
+  const pageLabel = feed.querySelector('[data-update-page-label]');
+  const empty = feed.querySelector('[data-update-empty]');
+  const limit = 10;
+  let activeFilter = 'all';
+  let currentPage = 1;
+
+  const render = () => {
+    const newestFirst = sort?.value !== 'oldest';
+    const visibleEntries = entries
+      .filter((entry) => activeFilter === 'all' || entry.dataset.category?.split(' ').includes(activeFilter))
+      .sort((first, second) => {
+        const difference = new Date(second.dataset.date) - new Date(first.dataset.date);
+        return newestFirst ? difference : -difference;
+      });
+    const totalPages = Math.max(1, Math.ceil(visibleEntries.length / limit));
+    currentPage = Math.min(currentPage, totalPages);
+    const start = (currentPage - 1) * limit;
+    const currentEntries = new Set(visibleEntries.slice(start, start + limit));
+
+    entries.forEach((entry) => { entry.hidden = !currentEntries.has(entry); });
+    if (empty) empty.hidden = visibleEntries.length !== 0;
+    if (pagination) pagination.hidden = totalPages <= 1;
+    if (previous) previous.disabled = currentPage === 1;
+    if (next) next.disabled = currentPage === totalPages;
+    if (pageLabel) pageLabel.textContent = `${currentPage} / ${totalPages}`;
+  };
+
+  filters.forEach((filter) => {
+    filter.addEventListener('click', () => {
+      activeFilter = filter.dataset.updateFilter || 'all';
+      currentPage = 1;
+      filters.forEach((button) => button.setAttribute('aria-pressed', String(button === filter)));
+      render();
+    });
+  });
+  sort?.addEventListener('change', () => { currentPage = 1; render(); });
+  previous?.addEventListener('click', () => { currentPage -= 1; render(); feed.scrollIntoView({ behavior: 'smooth', block: 'start' }); });
+  next?.addEventListener('click', () => { currentPage += 1; render(); feed.scrollIntoView({ behavior: 'smooth', block: 'start' }); });
+  render();
+}
+
 async function changeLanguage(language, initialLoad = false) {
   if (language === currentLanguage && !initialLoad) return;
 
@@ -196,6 +274,7 @@ if (headerInner && toggle) {
   });
   headerInner.insertBefore(switcher, toggle);
   updateSwitcher();
+  ensureUpdatesLink();
   ensureReviewsLink();
 }
 
@@ -220,3 +299,4 @@ ensureFavicon();
 setupWebAnalytics();
 normalizePageNumber();
 setupReadingProgress();
+setupUpdatesFeed();
