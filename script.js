@@ -69,6 +69,16 @@ function ensureFavicon() {
   document.head.append(icon);
 }
 
+function setupWebAnalytics() {
+  if (document.querySelector('script[data-cf-beacon]')) return;
+
+  const beacon = document.createElement('script');
+  beacon.type = 'module';
+  beacon.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+  beacon.dataset.cfBeacon = JSON.stringify({ token: 'e50124b81fb04cd294d61ae50631267b' });
+  document.head.append(beacon);
+}
+
 function normalizePageNumber(language = currentLanguage) {
   const pages = {
     'recensioni.html': { number: '05', italian: 'Recensioni', english: 'Reviews' },
@@ -207,5 +217,6 @@ if (currentLanguage === 'en' && !isLegacyEnglishPath) changeLanguage('en', true)
 else enhanceMotion();
 
 ensureFavicon();
+setupWebAnalytics();
 normalizePageNumber();
 setupReadingProgress();
