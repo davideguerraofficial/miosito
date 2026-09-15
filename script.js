@@ -48,6 +48,32 @@ const searchPages = [
   'contatti.html'
 ];
 const searchCache = new Map();
+const searchPageLabels = {
+  it: {
+    'index.html': 'Home',
+    'chi-sono.html': 'Autore',
+    'libri.html': 'Opere',
+    'progetti.html': 'Progetti',
+    'kickstarter.html': 'Kickstarter',
+    'aggiornamenti.html': 'Aggiornamenti',
+    'diario-arte-della-solitudine.html': 'Diario — L’Arte della Solitudine',
+    'diario-daniel-belmont.html': 'Diario — Daniel Belmont',
+    'recensioni.html': 'Recensioni',
+    'contatti.html': 'Contatti'
+  },
+  en: {
+    'index.html': 'Home',
+    'chi-sono.html': 'Author',
+    'libri.html': 'Books',
+    'progetti.html': 'Projects',
+    'kickstarter.html': 'Kickstarter',
+    'aggiornamenti.html': 'Updates',
+    'diario-arte-della-solitudine.html': 'Journal — The Art of Solitude',
+    'diario-daniel-belmont.html': 'Journal — Daniel Belmont',
+    'recensioni.html': 'Reviews',
+    'contatti.html': 'Contact'
+  }
+};
 
 function updateSwitcher() {
   if (!switcher) return;
@@ -141,6 +167,27 @@ function normaliseSearchText(value) {
   return value.toLocaleLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 }
 
+function cleanSearchText(value) {
+  return value.replace(/\s+/g, ' ').replace(/\s+([,.;:!?])/g, '$1').trim();
+}
+
+function shortenSearchSummary(value, limit = 205) {
+  const summary = cleanSearchText(value);
+  if (summary.length <= limit) return summary;
+  const ending = summary.lastIndexOf(' ', limit);
+  return `${summary.slice(0, ending > 80 ? ending : limit).trim()}…`;
+}
+
+function selectSearchSummary(entry, words) {
+  const matchesAllWords = (segment) => words.every((word) => normaliseSearchText(segment).includes(word));
+  const matchesOneWord = (segment) => words.some((word) => normaliseSearchText(segment).includes(word));
+  const preferred = entry.segments.find(matchesAllWords)
+    || entry.segments.find(matchesOneWord)
+    || entry.segments[0]
+    || '';
+  return shortenSearchSummary(preferred);
+}
+
 function searchCopy() {
   return currentLanguage === 'en'
     ? {
@@ -174,8 +221,13 @@ async function getSearchEntries(language) {
       const response = await fetch(`${prefix}${path}`, { cache: 'no-cache' });
       if (!response.ok) return null;
       const source = new DOMParser().parseFromString(await response.text(), 'text/html');
-      const content = source.querySelector('main')?.textContent.replace(/\s+/g, ' ').trim() || '';
-      return { path, title: source.title.replace(/\s+—\s+Davide Guerra$/, ''), content };
+      const main = source.querySelector('main');
+      const segments = [...(main?.querySelectorAll('p, li') || [])]
+        .map((element) => cleanSearchText(element.textContent))
+        .filter((segment) => segment.length > 18);
+      const title = searchPageLabels[language]?.[path] || source.title.replace(/\s+—\s+Davide Guerra$/, '');
+      const content = [title, ...segments].join(' ');
+      return { path, title, content, segments };
     } catch {
       return null;
     }
@@ -226,13 +278,10 @@ async function renderSearchResults() {
     const item = document.createElement('a');
     const heading = document.createElement('strong');
     const snippet = document.createElement('span');
-    const source = normaliseSearchText(entry.content);
-    const position = Math.max(0, source.indexOf(words[0]) - 85);
-    const excerpt = entry.content.slice(position, position + 185).trim();
     item.className = 'site-search__result';
     item.href = entry.path;
     heading.textContent = entry.title;
-    snippet.textContent = `${position ? '…' : ''}${excerpt}${position + 185 < entry.content.length ? '…' : ''}`;
+    snippet.textContent = selectSearchSummary(entry, words);
     item.append(heading, snippet);
     results.append(item);
   });
