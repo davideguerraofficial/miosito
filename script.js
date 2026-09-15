@@ -97,21 +97,23 @@ function ensureReviewsLink(language = currentLanguage) {
 }
 
 function ensureFavicon() {
+  const assetPrefix = document.documentElement.lang === 'en' ? '../' : '';
   const icon = document.querySelector('link[rel="icon"]') || document.createElement('link');
   if (!icon.parentNode) {
     icon.rel = 'icon';
     document.head.append(icon);
   }
   icon.type = 'image/png';
-  icon.href = 'img/logo-dg.png?v=20260915';
+  icon.href = `${assetPrefix}img/logo-dg.png?v=20260915-2`;
 }
 
 function applyBrandLogo() {
+  const assetPrefix = document.documentElement.lang === 'en' ? '../' : '';
   document.querySelectorAll('.brand-mark').forEach((mark) => {
     if (mark.querySelector('.brand-logo')) return;
     const logo = document.createElement('img');
     logo.className = 'brand-logo';
-    logo.src = 'img/logo-dg.png';
+    logo.src = `${assetPrefix}img/logo-dg.png`;
     logo.alt = '';
     mark.replaceChildren(logo);
     mark.classList.add('brand-mark--logo');
