@@ -173,8 +173,8 @@ function softenHomeTone(language = currentLanguage) {
   const lead = document.querySelector('.home-hero .lead');
   if (eyebrow) eyebrow.textContent = language === 'en' ? 'Writing · Projects' : 'Scrittura · Progetti';
   if (lead) lead.textContent = language === 'en'
-    ? 'Davide Guerra works on stories, projects and ideas that are still finding their form. Each one starts with a detail noticed closely, then takes its own direction.'
-    : 'Davide Guerra lavora su storie, progetti e idee che stanno ancora trovando la loro forma. Ognuna parte da un dettaglio osservato bene, poi prende la propria direzione.';
+    ? 'This is where I collect books, projects and ideas I work on in my spare time. Some are already available; others are still at the beginning.'
+    : 'Qui raccolgo libri, progetti e idee a cui lavoro nel tempo libero. Alcune sono già disponibili, altre sono ancora agli inizi.';
 }
 
 function normaliseSearchText(value) {
