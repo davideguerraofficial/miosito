@@ -97,13 +97,13 @@ function ensureReviewsLink(language = currentLanguage) {
 }
 
 function ensureFavicon() {
-  if (document.querySelector('link[rel="icon"]')) return;
-
-  const icon = document.createElement('link');
-  icon.rel = 'icon';
+  const icon = document.querySelector('link[rel="icon"]') || document.createElement('link');
+  if (!icon.parentNode) {
+    icon.rel = 'icon';
+    document.head.append(icon);
+  }
   icon.type = 'image/png';
-  icon.href = 'img/logo-dg.png';
-  document.head.append(icon);
+  icon.href = 'img/logo-dg.png?v=20260915';
 }
 
 function applyBrandLogo() {
