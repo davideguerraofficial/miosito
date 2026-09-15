@@ -74,6 +74,20 @@ const searchPageLabels = {
     'contatti.html': 'Contact'
   }
 };
+const searchBlockSelector = [
+  '.page-intro',
+  '.section-header',
+  'article',
+  '.story-copy',
+  '.logo-story',
+  '.practice-item',
+  '.platform',
+  '.contact-copy',
+  '.linktree-panel',
+  '.project-journal-note',
+  '.kickstarter-callout',
+  '.review-note'
+].join(', ');
 
 function updateSwitcher() {
   if (!switcher) return;
@@ -171,6 +185,33 @@ function cleanSearchText(value) {
   return value.replace(/\s+/g, ' ').replace(/\s+([,.;:!?])/g, '$1').trim();
 }
 
+function readSearchText(element) {
+  const copy = element.cloneNode(true);
+  copy.querySelectorAll('script, style, svg, i, [aria-hidden="true"], a, button').forEach((item) => item.remove());
+  copy.querySelectorAll('*').forEach((item) => item.after(' '));
+  return cleanSearchText(copy.textContent);
+}
+
+function getSearchBlocks(root) {
+  if (!root) return [];
+  const segmentSelector = 'p, blockquote, small, li';
+  return [...root.querySelectorAll(searchBlockSelector)]
+    .map((element) => {
+      const headingElement = element.querySelector('h1, h2, h3, strong');
+      const heading = headingElement ? readSearchText(headingElement) : '';
+      const segmentElements = element.matches(segmentSelector)
+        ? [element]
+        : [...element.querySelectorAll(segmentSelector)];
+      const segments = segmentElements
+        .map((segment) => readSearchText(segment))
+        .filter((segment) => segment.length > 18);
+      const fallback = readSearchText(element);
+      if (!segments.length && fallback.length > 18) segments.push(fallback);
+      return { element, heading, segments, content: [heading, ...segments].join(' ') };
+    })
+    .filter((block) => block.content.length > 18);
+}
+
 function shortenSearchSummary(value, limit = 205) {
   const summary = cleanSearchText(value);
   if (summary.length <= limit) return summary;
@@ -204,18 +245,19 @@ function focusSearchResult() {
   if (!query) return;
 
   const words = normaliseSearchText(query).split(/\s+/).filter(Boolean);
-  const candidateElements = [...document.querySelectorAll('main p, main li')]
-    .filter((element) => cleanSearchText(element.textContent).length > 18);
   const requestedTarget = address.searchParams.get('punto');
   const targetIndex = requestedTarget === null ? -1 : Number(requestedTarget);
+  const blocks = getSearchBlocks(document.querySelector('main'));
   const target = Number.isInteger(targetIndex) && targetIndex >= 0
-    ? candidateElements[targetIndex]
-    : candidateElements.find((element) => words.every((word) => normaliseSearchText(element.textContent).includes(word)));
+    ? blocks[targetIndex]?.element
+    : blocks.find((block) => words.every((word) => normaliseSearchText(block.content).includes(word)))?.element;
 
   address.searchParams.delete('cerca');
   address.searchParams.delete('punto');
   window.history.replaceState({}, '', `${address.pathname}${address.search}${address.hash}`);
   if (!target) return;
+
+  target.closest('[data-updates-feed]')?.showUpdateEntry?.(target);
 
   window.requestAnimationFrame(() => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -261,19 +303,19 @@ async function getSearchEntries(language) {
       const response = await fetch(`${prefix}${path}`, { cache: 'no-cache' });
       if (!response.ok) return null;
       const source = new DOMParser().parseFromString(await response.text(), 'text/html');
-      const main = source.querySelector('main');
-      const segments = [...(main?.querySelectorAll('p, li') || [])]
-        .map((element) => cleanSearchText(element.textContent))
-        .filter((segment) => segment.length > 18);
-      const title = searchPageLabels[language]?.[path] || source.title.replace(/\s+—\s+Davide Guerra$/, '');
-      const content = [title, ...segments].join(' ');
-      return { path, title, content, segments };
+      const pageTitle = searchPageLabels[language]?.[path] || source.title.replace(/\s+—\s+Davide Guerra$/, '');
+      return getSearchBlocks(source.querySelector('main')).map((block, targetIndex) => {
+        const title = block.heading && normaliseSearchText(block.heading) !== normaliseSearchText(pageTitle)
+          ? `${pageTitle} — ${block.heading}`
+          : pageTitle;
+        return { path, title, content: [title, block.content].join(' '), segments: block.segments, targetIndex };
+      });
     } catch {
       return null;
     }
   }));
 
-  const availableEntries = entries.filter(Boolean);
+  const availableEntries = entries.flat().filter(Boolean);
   searchCache.set(language, availableEntries);
   return availableEntries;
 }
@@ -303,10 +345,17 @@ async function renderSearchResults() {
   const entries = await getSearchEntries(currentLanguage);
   if (normaliseSearchText(searchInput.value.trim()) !== query) return;
 
-  const matches = entries.filter((entry) => {
+  const matches = entries.map((entry) => {
     const searchable = normaliseSearchText(`${entry.title} ${entry.content}`);
-    return words.every((word) => searchable.includes(word));
-  }).slice(0, 8);
+    if (!words.every((word) => searchable.includes(word))) return null;
+    const titleText = normaliseSearchText(entry.title);
+    const summary = selectSearchSegment(entry, words);
+    const summaryText = normaliseSearchText(summary);
+    const score = words.filter((word) => titleText.includes(word)).length * 20
+      + (words.every((word) => summaryText.includes(word)) ? 8 : 0)
+      + (summaryText.startsWith(words[0]) ? 3 : 0);
+    return { ...entry, summary, score };
+  }).filter(Boolean).sort((first, second) => second.score - first.score).slice(0, 8);
 
   results.replaceChildren();
   if (!matches.length) {
@@ -318,11 +367,10 @@ async function renderSearchResults() {
     const item = document.createElement('a');
     const heading = document.createElement('strong');
     const snippet = document.createElement('span');
-    const matchedSegment = selectSearchSegment(entry, words);
     item.className = 'site-search__result';
-    item.href = buildSearchResultLink(entry.path, rawQuery, entry.segments.indexOf(matchedSegment));
+    item.href = buildSearchResultLink(entry.path, rawQuery, entry.targetIndex);
     heading.textContent = entry.title;
-    snippet.textContent = shortenSearchSummary(matchedSegment);
+    snippet.textContent = shortenSearchSummary(entry.summary);
     item.append(heading, snippet);
     results.append(item);
   });
@@ -590,6 +638,17 @@ function setupUpdatesFeed(scope = document) {
     if (previous) previous.disabled = currentPage === 1;
     if (next) next.disabled = currentPage === totalPages;
     if (pageLabel) pageLabel.textContent = `${currentPage} / ${totalPages}`;
+  };
+
+  feed.showUpdateEntry = (entry) => {
+    activeFilter = 'all';
+    activeYear = 'all';
+    filters.forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.updateFilter === 'all')));
+    yearFilters.forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.updateYear === 'all')));
+    const orderedEntries = [...entries].sort((first, second) => new Date(second.dataset.date) - new Date(first.dataset.date));
+    const entryPosition = orderedEntries.indexOf(entry);
+    if (entryPosition >= 0) currentPage = Math.floor(entryPosition / limit) + 1;
+    render();
   };
 
   filters.forEach((filter) => {
