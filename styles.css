@@ -235,6 +235,33 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .site-search__result:hover { padding-left: 10px; color: #79572f; }
 .site-search__result strong { font-family: var(--serif); font-size: 1.7rem; font-weight: 500; letter-spacing: -0.035em; line-height: 0.95; }
 .site-search__result span { color: #596465; font-size: 0.87rem; line-height: 1.58; }
+.search-focus { position: relative; z-index: 0; }
+.search-focus::before, .search-focus::after { position: absolute; z-index: -1; pointer-events: none; content: ""; }
+.search-focus::before { inset: -13px -16px; border: 1px solid rgba(177, 132, 67, 0.48); background: linear-gradient(100deg, rgba(216, 189, 145, 0.06), rgba(216, 189, 145, 0.36) 48%, rgba(216, 189, 145, 0.07)); transform: scaleX(0.06); transform-origin: left center; opacity: 0; }
+.search-focus::after { right: -16px; bottom: -13px; left: -16px; height: 1px; background: var(--sand); transform: scaleX(0); transform-origin: left center; opacity: 0; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .search-focus::before { animation: search-focus-wash 3.1s cubic-bezier(0.22, 1, 0.36, 1) both; }
+  .search-focus::after { animation: search-focus-line 3.1s cubic-bezier(0.22, 1, 0.36, 1) both; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .search-focus::before { opacity: 0.75; transform: scaleX(1); }
+  .search-focus::after { opacity: 0.9; transform: scaleX(1); }
+}
+
+@keyframes search-focus-wash {
+  0% { opacity: 0; transform: scaleX(0.06); }
+  16% { opacity: 1; transform: scaleX(1); }
+  62% { opacity: 0.95; transform: scaleX(1); }
+  100% { opacity: 0; transform: scaleX(0.96); }
+}
+
+@keyframes search-focus-line {
+  0%, 9% { opacity: 0; transform: scaleX(0); }
+  23%, 62% { opacity: 1; transform: scaleX(1); }
+  100% { opacity: 0; transform: scaleX(0.8); }
+}
 
 .eyebrow {
   margin: 0 0 14px;

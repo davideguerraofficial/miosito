@@ -178,14 +178,54 @@ function shortenSearchSummary(value, limit = 205) {
   return `${summary.slice(0, ending > 80 ? ending : limit).trim()}…`;
 }
 
-function selectSearchSummary(entry, words) {
+function selectSearchSegment(entry, words) {
   const matchesAllWords = (segment) => words.every((word) => normaliseSearchText(segment).includes(word));
   const matchesOneWord = (segment) => words.some((word) => normaliseSearchText(segment).includes(word));
-  const preferred = entry.segments.find(matchesAllWords)
+  return entry.segments.find(matchesAllWords)
     || entry.segments.find(matchesOneWord)
     || entry.segments[0]
     || '';
-  return shortenSearchSummary(preferred);
+}
+
+function selectSearchSummary(entry, words) {
+  return shortenSearchSummary(selectSearchSegment(entry, words));
+}
+
+function buildSearchResultLink(path, query, segmentIndex) {
+  const destination = new URL(path, window.location.href);
+  destination.searchParams.set('cerca', query);
+  if (segmentIndex >= 0) destination.searchParams.set('punto', String(segmentIndex));
+  return destination.href;
+}
+
+function focusSearchResult() {
+  const address = new URL(window.location.href);
+  const query = address.searchParams.get('cerca');
+  if (!query) return;
+
+  const words = normaliseSearchText(query).split(/\s+/).filter(Boolean);
+  const candidateElements = [...document.querySelectorAll('main p, main li')]
+    .filter((element) => cleanSearchText(element.textContent).length > 18);
+  const requestedTarget = address.searchParams.get('punto');
+  const targetIndex = requestedTarget === null ? -1 : Number(requestedTarget);
+  const target = Number.isInteger(targetIndex) && targetIndex >= 0
+    ? candidateElements[targetIndex]
+    : candidateElements.find((element) => words.every((word) => normaliseSearchText(element.textContent).includes(word)));
+
+  address.searchParams.delete('cerca');
+  address.searchParams.delete('punto');
+  window.history.replaceState({}, '', `${address.pathname}${address.search}${address.hash}`);
+  if (!target) return;
+
+  window.requestAnimationFrame(() => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const headerHeight = document.querySelector('.site-header')?.getBoundingClientRect().height || 0;
+    const destination = Math.max(0, target.getBoundingClientRect().top + window.scrollY - headerHeight - 46);
+    window.scrollTo({ top: destination, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+    target.classList.remove('search-focus');
+    window.requestAnimationFrame(() => target.classList.add('search-focus'));
+    window.setTimeout(() => target.classList.remove('search-focus'), prefersReducedMotion ? 1200 : 3200);
+  });
 }
 
 function searchCopy() {
@@ -278,10 +318,11 @@ async function renderSearchResults() {
     const item = document.createElement('a');
     const heading = document.createElement('strong');
     const snippet = document.createElement('span');
+    const matchedSegment = selectSearchSegment(entry, words);
     item.className = 'site-search__result';
-    item.href = entry.path;
+    item.href = buildSearchResultLink(entry.path, rawQuery, entry.segments.indexOf(matchedSegment));
     heading.textContent = entry.title;
-    snippet.textContent = selectSearchSummary(entry, words);
+    snippet.textContent = shortenSearchSummary(matchedSegment);
     item.append(heading, snippet);
     results.append(item);
   });
@@ -430,6 +471,7 @@ function copyPageContent(source, language) {
   setupPageAtmosphere();
   enhanceMotion(nextMain);
   setupUpdatesFeed(nextMain);
+  if (initialLoad) focusSearchResult();
 }
 
 function setupPageAtmosphere() {
@@ -640,3 +682,4 @@ normalizePageNumber();
 setupPageAtmosphere();
 setupReadingProgress();
 setupUpdatesFeed();
+if (currentLanguage !== 'en') focusSearchResult();
