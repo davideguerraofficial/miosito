@@ -468,7 +468,7 @@ function setupUpdatesFeed(scope = document) {
   const next = feed.querySelector('[data-update-next]');
   const pageLabel = feed.querySelector('[data-update-page-label]');
   const empty = feed.querySelector('[data-update-empty]');
-  const limit = 10;
+  const limit = 5;
   let activeFilter = 'all';
   const requestedYear = new URLSearchParams(window.location.search).get('anno');
   let activeYear = yearFilters.some((button) => button.dataset.updateYear === requestedYear) ? requestedYear : 'all';
