@@ -33,6 +33,21 @@ if (isLegacyEnglishPath) {
 
 let currentLanguage = readLanguage();
 let switcher;
+let searchPanel;
+let searchInput;
+const searchPages = [
+  'index.html',
+  'chi-sono.html',
+  'libri.html',
+  'progetti.html',
+  'kickstarter.html',
+  'aggiornamenti.html',
+  'diario-arte-della-solitudine.html',
+  'diario-daniel-belmont.html',
+  'recensioni.html',
+  'contatti.html'
+];
+const searchCache = new Map();
 
 function updateSwitcher() {
   if (!switcher) return;
@@ -86,9 +101,214 @@ function ensureFavicon() {
 
   const icon = document.createElement('link');
   icon.rel = 'icon';
-  icon.type = 'image/svg+xml';
-  icon.href = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23111a1e'/%3E%3Ctext x='32' y='41' fill='%23f4f0e8' font-family='Georgia' font-size='22' text-anchor='middle'%3EDG%3C/text%3E%3C/svg%3E";
+  icon.type = 'image/png';
+  icon.href = 'img/logo-dg.png';
   document.head.append(icon);
+}
+
+function applyBrandLogo() {
+  document.querySelectorAll('.brand-mark').forEach((mark) => {
+    if (mark.querySelector('.brand-logo')) return;
+    const logo = document.createElement('img');
+    logo.className = 'brand-logo';
+    logo.src = 'img/logo-dg.png';
+    logo.alt = '';
+    mark.replaceChildren(logo);
+    mark.classList.add('brand-mark--logo');
+  });
+}
+
+function updateFooterTone(language = currentLanguage) {
+  const note = document.querySelector('.footer-note');
+  if (note) note.textContent = language === 'en'
+    ? 'Writing, projects and ideas in motion.'
+    : 'Scrittura, progetti e idee in cammino.';
+}
+
+function softenHomeTone(language = currentLanguage) {
+  if (pageName !== 'index.html') return;
+  const eyebrow = document.querySelector('.home-hero .eyebrow');
+  const lead = document.querySelector('.home-hero .lead');
+  if (eyebrow) eyebrow.textContent = language === 'en' ? 'Writing · Projects' : 'Scrittura · Progetti';
+  if (lead) lead.textContent = language === 'en'
+    ? 'Davide Guerra works on stories, projects and ideas that are still finding their form. Each one starts with a detail noticed closely, then takes its own direction.'
+    : 'Davide Guerra lavora su storie, progetti e idee che stanno ancora trovando la loro forma. Ognuna parte da un dettaglio osservato bene, poi prende la propria direzione.';
+}
+
+function normaliseSearchText(value) {
+  return value.toLocaleLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+}
+
+function searchCopy() {
+  return currentLanguage === 'en'
+    ? {
+        trigger: 'Search', title: 'Search the site', close: 'Close search', placeholder: 'Try “solitude”, “Kickstarter”, “Daniel Belmont”…', hint: 'Search by a word, a title or a project.', loading: 'Searching the site…', empty: 'No pages match this search.'
+      }
+    : {
+        trigger: 'Cerca', title: 'Cerca nel sito', close: 'Chiudi ricerca', placeholder: 'Prova “solitudine”, “Kickstarter”, “Daniel Belmont”…', hint: 'Cerca una parola, un titolo o un progetto.', loading: 'Ricerca nel sito…', empty: 'Nessuna pagina corrisponde a questa ricerca.'
+      };
+}
+
+function updateSearchLabels() {
+  if (!searchPanel) return;
+  const copy = searchCopy();
+  document.querySelectorAll('[data-open-search]').forEach((button) => {
+    const label = button.querySelector('.search-toggle__label');
+    if (label) label.textContent = copy.trigger;
+    button.setAttribute('aria-label', copy.title);
+  });
+  searchPanel.querySelector('[data-search-title]').textContent = copy.title;
+  searchPanel.querySelector('[data-close-search]').setAttribute('aria-label', copy.close);
+  searchInput.placeholder = copy.placeholder;
+  if (!searchInput.value.trim()) searchPanel.querySelector('[data-search-results]').textContent = copy.hint;
+}
+
+async function getSearchEntries(language) {
+  if (searchCache.has(language)) return searchCache.get(language);
+
+  const prefix = language === 'en' ? 'en/' : '';
+  const entries = await Promise.all(searchPages.map(async (path) => {
+    try {
+      const response = await fetch(`${prefix}${path}`, { cache: 'no-cache' });
+      if (!response.ok) return null;
+      const source = new DOMParser().parseFromString(await response.text(), 'text/html');
+      const content = source.querySelector('main')?.textContent.replace(/\s+/g, ' ').trim() || '';
+      return { path, title: source.title.replace(/\s+—\s+Davide Guerra$/, ''), content };
+    } catch {
+      return null;
+    }
+  }));
+
+  const availableEntries = entries.filter(Boolean);
+  searchCache.set(language, availableEntries);
+  return availableEntries;
+}
+
+function createSearchMessage(message) {
+  const result = document.createElement('p');
+  result.className = 'site-search__message';
+  result.textContent = message;
+  return result;
+}
+
+async function renderSearchResults() {
+  if (!searchPanel) return;
+  const results = searchPanel.querySelector('[data-search-results]');
+  const copy = searchCopy();
+  const rawQuery = searchInput.value.trim();
+  results.replaceChildren();
+
+  if (!rawQuery) {
+    results.append(createSearchMessage(copy.hint));
+    return;
+  }
+
+  results.append(createSearchMessage(copy.loading));
+  const query = normaliseSearchText(rawQuery);
+  const words = query.split(/\s+/).filter(Boolean);
+  const entries = await getSearchEntries(currentLanguage);
+  if (normaliseSearchText(searchInput.value.trim()) !== query) return;
+
+  const matches = entries.filter((entry) => {
+    const searchable = normaliseSearchText(`${entry.title} ${entry.content}`);
+    return words.every((word) => searchable.includes(word));
+  }).slice(0, 8);
+
+  results.replaceChildren();
+  if (!matches.length) {
+    results.append(createSearchMessage(copy.empty));
+    return;
+  }
+
+  matches.forEach((entry) => {
+    const item = document.createElement('a');
+    const heading = document.createElement('strong');
+    const snippet = document.createElement('span');
+    const source = normaliseSearchText(entry.content);
+    const position = Math.max(0, source.indexOf(words[0]) - 85);
+    const excerpt = entry.content.slice(position, position + 185).trim();
+    item.className = 'site-search__result';
+    item.href = entry.path;
+    heading.textContent = entry.title;
+    snippet.textContent = `${position ? '…' : ''}${excerpt}${position + 185 < entry.content.length ? '…' : ''}`;
+    item.append(heading, snippet);
+    results.append(item);
+  });
+}
+
+function openSiteSearch() {
+  if (!searchPanel) return;
+  nav?.classList.remove('is-open');
+  toggle?.setAttribute('aria-expanded', 'false');
+  updateSearchLabels();
+  searchPanel.hidden = false;
+  document.body.classList.add('search-open');
+  window.requestAnimationFrame(() => searchInput.focus());
+}
+
+function closeSiteSearch() {
+  if (!searchPanel) return;
+  searchPanel.hidden = true;
+  document.body.classList.remove('search-open');
+}
+
+function addSearchToNavigation() {
+  const navigationList = nav?.querySelector('ul');
+  if (!navigationList || navigationList.querySelector('.site-search-item')) return;
+  const mobileItem = document.createElement('li');
+  const mobileTrigger = document.createElement('button');
+  mobileTrigger.className = 'site-search-toggle site-search-toggle--nav';
+  mobileTrigger.type = 'button';
+  mobileTrigger.dataset.openSearch = 'true';
+  mobileTrigger.setAttribute('aria-controls', 'site-search');
+  mobileTrigger.innerHTML = '<i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i><span class="search-toggle__label"></span>';
+  mobileTrigger.addEventListener('click', openSiteSearch);
+  mobileItem.className = 'site-search-item';
+  mobileItem.append(mobileTrigger);
+  navigationList.append(mobileItem);
+  updateSearchLabels();
+}
+
+function setupSiteSearch() {
+  if (!headerInner) return;
+  if (searchPanel || document.querySelector('.site-search')) {
+    addSearchToNavigation();
+    return;
+  }
+
+  const headerTrigger = document.createElement('button');
+  headerTrigger.className = 'site-search-toggle site-search-toggle--header';
+  headerTrigger.type = 'button';
+  headerTrigger.dataset.openSearch = 'true';
+  headerTrigger.setAttribute('aria-controls', 'site-search');
+  headerTrigger.innerHTML = '<i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i><span class="search-toggle__label"></span>';
+  headerTrigger.addEventListener('click', openSiteSearch);
+  headerInner.insertBefore(headerTrigger, switcher || toggle);
+
+  searchPanel = document.createElement('div');
+  searchPanel.id = 'site-search';
+  searchPanel.className = 'site-search';
+  searchPanel.hidden = true;
+  searchPanel.innerHTML = '<div class="site-search__backdrop" data-close-search></div><section class="site-search__dialog" role="dialog" aria-modal="true" aria-labelledby="site-search-title"><div class="site-search__top"><p class="eyebrow">Davide Guerra</p><button class="site-search__close" type="button" data-close-search><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></div><h2 id="site-search-title" data-search-title></h2><label class="site-search__field"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i><input type="search" autocomplete="off" data-search-input></label><div class="site-search__results" data-search-results></div></section>';
+  document.body.append(searchPanel);
+  searchInput = searchPanel.querySelector('[data-search-input]');
+  searchInput.addEventListener('input', renderSearchResults);
+  searchPanel.addEventListener('click', (event) => {
+    if (event.target.closest('[data-close-search]')) closeSiteSearch();
+  });
+  window.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && !searchPanel.hidden) closeSiteSearch();
+  });
+  addSearchToNavigation();
+  updateSearchLabels();
+}
+
+function setupMobileMenuLabel() {
+  if (!toggle || toggle.querySelector('.menu-toggle__label')) return;
+  const label = document.createElement('span');
+  label.className = 'menu-toggle__label';
+  label.textContent = currentLanguage === 'en' ? 'Menu' : 'Menu';
+  toggle.append(label);
 }
 
 function setupWebAnalytics() {
@@ -138,8 +358,12 @@ function copyPageContent(source, language) {
   currentMain.replaceWith(nextMain);
   if (sourceNavigation && currentNavigation) currentNavigation.replaceWith(sourceNavigation.cloneNode(true));
   if (sourceFooter && currentFooter) currentFooter.replaceWith(sourceFooter.cloneNode(true));
+  applyBrandLogo();
+  updateFooterTone(language);
+  softenHomeTone(language);
   ensureUpdatesLink(language);
   ensureReviewsLink(language);
+  addSearchToNavigation();
 
   document.documentElement.lang = language;
   document.title = source.title;
@@ -315,6 +539,7 @@ async function changeLanguage(language, initialLoad = false) {
     currentLanguage = language;
     saveLanguage(language);
     updateSwitcher();
+    updateSearchLabels();
 
     if (!initialLoad) window.scrollTo({ top: 0, behavior: 'auto' });
   } catch (error) {
@@ -335,6 +560,9 @@ if (headerInner && toggle) {
   ensureReviewsLink();
 }
 
+setupMobileMenuLabel();
+setupSiteSearch();
+
 if (toggle && nav) {
   toggle.addEventListener('click', () => {
     const isOpen = nav.classList.toggle('is-open');
@@ -353,6 +581,9 @@ if (currentLanguage === 'en' && !isLegacyEnglishPath) changeLanguage('en', true)
 else enhanceMotion();
 
 ensureFavicon();
+applyBrandLogo();
+updateFooterTone();
+softenHomeTone();
 setupWebAnalytics();
 normalizePageNumber();
 setupPageAtmosphere();
