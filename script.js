@@ -1,9 +1,10 @@
 const toggle = document.querySelector('.menu-toggle');
 const nav = document.querySelector('.site-nav');
 const headerInner = document.querySelector('.header-inner');
-const pageName = window.location.pathname.split('/').pop() || 'index.html';
+const pathLeaf = window.location.pathname.split('/').pop();
+const pageName = !pathLeaf || pathLeaf === 'en' ? 'index.html' : pathLeaf;
 const languageKey = 'davide-guerra-language';
-const isLegacyEnglishPath = /\/en\/?$/.test(window.location.pathname);
+const isEnglishPath = /\/en(?:\/|$)/.test(window.location.pathname);
 const updatePageNames = new Set([
   'aggiornamenti.html',
   'diario-arte-della-solitudine.html',
@@ -26,12 +27,10 @@ function saveLanguage(language) {
   }
 }
 
-if (isLegacyEnglishPath) {
-  saveLanguage('en');
-  window.location.replace(`../${pageName}${window.location.search}${window.location.hash}`);
-}
-
-let currentLanguage = readLanguage();
+// Pages opened directly from /en/ must identify themselves as English before
+// reading a preference saved on another page. Otherwise an English page could
+// display Italian as the selected option and make the switcher appear stuck.
+let currentLanguage = isEnglishPath ? 'en' : readLanguage();
 let switcher;
 let searchPanel;
 let searchInput;
@@ -681,6 +680,16 @@ function setupUpdatesFeed(scope = document) {
 async function changeLanguage(language, initialLoad = false) {
   if (language === currentLanguage && !initialLoad) return;
 
+  if (!initialLoad) {
+    saveLanguage(language);
+    const destination = language === 'en'
+      ? (isEnglishPath ? pageName : `en/${pageName}`)
+      : (isEnglishPath ? `../${pageName}` : pageName);
+
+    window.location.assign(`${destination}${window.location.search}${window.location.hash}`);
+    return;
+  }
+
   try {
     const sourcePath = language === 'en' ? `en/${pageName}` : pageName;
     const response = await fetch(sourcePath, { cache: 'no-cache' });
@@ -729,7 +738,7 @@ if (toggle && nav) {
   });
 }
 
-if (currentLanguage === 'en' && !isLegacyEnglishPath) changeLanguage('en', true);
+if (currentLanguage === 'en' && !isEnglishPath) changeLanguage('en', true);
 else enhanceMotion();
 
 ensureFavicon();
