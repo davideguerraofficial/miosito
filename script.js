@@ -626,6 +626,10 @@ function setupUpdatesFeed(scope = document) {
         const difference = new Date(second.dataset.date) - new Date(first.dataset.date);
         return newestFirst ? difference : -difference;
       });
+
+    // The sorted array also has to be reflected in the page, otherwise the
+    // selector changes only which entries are visible and not their order.
+    visibleEntries.forEach((entry) => list?.append(entry));
     const totalPages = Math.max(1, Math.ceil(visibleEntries.length / limit));
     currentPage = Math.min(currentPage, totalPages);
     const start = (currentPage - 1) * limit;
