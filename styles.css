@@ -1431,3 +1431,251 @@ html, body { background: var(--paper); color: var(--body-text); }
     .project-card:nth-child(4) { background: var(--surface-soft); }
   }
 }
+
+/*
+  Final colour direction
+  The light version returns to the original warm editorial beige. The night
+  version is its calmer graphite-petrol counterpart: no black backgrounds,
+  no saturated green and no muddy brown.
+*/
+:root {
+  color-scheme: light dark;
+  --ink: #111a1e;
+  --ink-soft: #29363b;
+  --paper: #f4f0e8;
+  --paper-deep: #e8e0d2;
+  --sand: #c2a06e;
+  --sand-light: #d8bd91;
+  --mist: #aeb6b4;
+  --line: rgba(17, 26, 30, 0.14);
+  --surface: #fffdf8;
+  --surface-soft: #e9e0d2;
+  --surface-raised: #fffdf8;
+  --body-text: #111a1e;
+  --body-muted: #465154;
+  --body-subtle: #687275;
+  --surface-border: rgba(17, 26, 30, 0.16);
+  --dark-surface: #111a1e;
+  --dark-surface-strong: #0e1518;
+  --on-dark: #f4f0e8;
+  --on-dark-muted: #d4d0c8;
+  --on-dark-line: rgba(244, 240, 232, 0.16);
+  --shadow: rgba(17, 26, 30, 0.12);
+  --muted: #526062;
+}
+
+html, body { background: var(--paper); color: var(--body-text); }
+
+/* Restore the original light page, including its different warm paper cards. */
+.site-header { background: rgba(17, 26, 30, 0.96); border-bottom-color: var(--on-dark-line); color: #fff; }
+.reading-progress { background: linear-gradient(90deg, var(--sand), var(--sand-light), #fff0ca); }
+.logo-story { background: #e9e0d2; }
+.review-category { background: #ebe3d6; }
+.voice-card { background: #e2d8c9; }
+.update-project { background: #e4dbcc; }
+.updates-feed-inner { background: #ece5da; }
+.edition-card { background: #e7ded0; }
+.project-card { background: #ece6db; }
+.project-card:nth-child(4) { background: #d6c4a7; }
+.kickstarter-callout { background: #d8c3a3; }
+.current-work { background: #e7ded0; }
+.newsletter-invitation { background: #e5daca; }
+.review-card, .newsletter-status__card { background: var(--paper); }
+
+.home-hero,
+.page-intro,
+.dark-band,
+.project-journal-note,
+.newsletter-invitation__panel,
+.progress-project--featured,
+.edition-card--dark,
+.kickstarter-feature,
+.project-card:nth-child(1),
+.update-project--dark,
+.linktree-panel,
+.newsletter-panel { background: var(--ink); color: var(--paper); }
+
+.site-footer { background: #0e1518; color: rgba(244, 240, 232, 0.75); }
+.lead { color: #3d484a; }
+.work-type { color: #687275; }
+.work-row p, .book-copy p { color: #465154; }
+.concept p, .update-entry p { color: #4d5759; }
+.editorial-copy p { color: #425052; }
+.bio-facts { color: #5a6364; }
+.practice-item p { color: #485355; }
+.logo-story > div > p:not(.eyebrow) { color: #475152; }
+.logo-meanings li { color: #4f595a; }
+.review-card p { color: #3d484a; }
+.review-note, .archive-year p { color: #5d6768; }
+.update-sort, .update-empty { color: #596465; }
+.update-entry__date, .platform small { color: #697374; }
+.kickstarter-step p { color: #505a5b; }
+.kickstarter-callout p { color: #404849; }
+.direct-contact span { color: #6a7475; }
+.progress-project__status, .edition-card .eyebrow, .voice-meta, .update-entry__meta { color: #806948; }
+.voice-stars { color: #b26e26; }
+.logo-story__line, .email-address:hover, .archive-year:hover, .site-search__result:hover { color: #7c5b33; }
+
+/* A featured project is always dark. This prevents pale text on a pale card. */
+.progress-project.progress-project--featured {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--paper);
+}
+.progress-project--featured .progress-project__status,
+.progress-project--featured .text-link { color: var(--paper); }
+.progress-project--featured .progress-meter__labels { color: rgba(244, 240, 232, 0.65); }
+.progress-project--featured .progress-meter__track { background: rgba(244, 240, 232, 0.18); }
+.progress-project--featured .progress-meter__fill { background: var(--sand-light); }
+
+@media (max-width: 960px) {
+  :root {
+    --ink: #142126;
+    --ink-soft: #354247;
+    --paper: #f7f3ec;
+    --paper-deep: #eee6da;
+    --sand: #a6804d;
+    --sand-light: #d7b57f;
+    --line: rgba(20, 33, 38, 0.16);
+    --surface: #fffdfa;
+    --surface-soft: #f0e8dc;
+    --surface-raised: #fffdfa;
+    --body-text: #142126;
+    --body-muted: #465154;
+    --body-subtle: #687275;
+    --surface-border: #d8ccbc;
+    --dark-surface: #142126;
+    --dark-surface-strong: #0e171a;
+    --on-dark: #f7f3ec;
+    --on-dark-muted: #d6d2c9;
+    --on-dark-line: rgba(247, 243, 236, 0.16);
+    --shadow: rgba(20, 33, 38, 0.055);
+  }
+
+  .current-work, .newsletter-invitation { background: var(--paper); }
+  .progress-project, .progress-project:first-child, .progress-project:last-child,
+  .kickstarter-step, .kickstarter-step:first-child, .kickstarter-step:last-child,
+  .concept, .concept:first-child, .concept:last-child,
+  .work-row { border-color: var(--surface-border); background: var(--surface); box-shadow: 0 9px 22px var(--shadow); }
+  .project-card, .update-project, .edition-card, .voice-card, .review-category, .updates-feed-inner { border-color: var(--surface-border); box-shadow: 0 9px 22px var(--shadow); }
+  .project-card:not(:first-child):not(.project-card--image), .update-project:not(.update-project--dark), .edition-card:not(.edition-card--dark), .voice-card:not(:nth-child(2)):not(:nth-child(3)), .review-category, .updates-feed-inner { background: var(--surface); }
+  .project-card:nth-child(4) { background: var(--surface-soft); }
+  .progress-project.progress-project--featured { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+  .dark-band .concept, .dark-band .concept:first-child, .dark-band .concept:last-child { border-color: rgba(215, 181, 127, 0.36); background: rgba(255, 253, 250, 0.045); box-shadow: none; }
+}
+
+/* Night mode: the same editorial structure, made lighter and quieter for reading. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --ink: #2c4246;
+    --ink-soft: #425a5e;
+    --paper: #28393d;
+    --paper-deep: #30454a;
+    --sand: #9aafb0;
+    --sand-light: #d5e0dd;
+    --mist: #aabdbc;
+    --line: rgba(244, 240, 232, 0.17);
+    --surface: #3a5054;
+    --surface-soft: #34494e;
+    --surface-raised: #415a5e;
+    --body-text: #f7f3ec;
+    --body-muted: #d1d7d3;
+    --body-subtle: #b5c3c0;
+    --surface-border: rgba(244, 240, 232, 0.21);
+    --dark-surface: #23383c;
+    --dark-surface-strong: #1e3034;
+    --on-dark: #f7f3ec;
+    --on-dark-muted: #d5dcd7;
+    --on-dark-line: rgba(244, 240, 232, 0.18);
+    --shadow: rgba(7, 17, 20, 0.24);
+  }
+
+  html, body { background: var(--paper); color: var(--body-text); }
+  .site-header { background: rgba(30, 48, 52, 0.97); }
+  .site-footer { background: var(--dark-surface-strong); }
+  .reading-progress { background: linear-gradient(90deg, #9aafb0, #d5e0dd, #f7f3ec); }
+
+  .home-hero,
+  .page-intro,
+  .dark-band,
+  .project-journal-note,
+  .newsletter-invitation__panel,
+  .progress-project--featured,
+  .edition-card--dark,
+  .kickstarter-feature,
+  .project-card:nth-child(1),
+  .update-project--dark,
+  .linktree-panel,
+  .newsletter-panel { background: var(--dark-surface); color: var(--on-dark); }
+
+  .logo-story, .review-category, .voice-card, .update-project,
+  .updates-feed-inner, .edition-card, .project-card, .kickstarter-callout,
+  .review-card, .newsletter-status__card { background: var(--surface); color: var(--body-text); }
+  .project-card:nth-child(4) { background: var(--surface-soft); }
+  .current-work, .newsletter-invitation { background: var(--paper-deep); }
+  .lead, .work-row p, .concept p, .editorial-copy p, .bio-facts,
+  .practice-item p, .logo-story > div > p:not(.eyebrow), .logo-meanings li,
+  .book-copy p, .review-card p, .review-note, .update-entry p,
+  .archive-year p, .kickstarter-step p, .kickstarter-callout p,
+  .newsletter-status__card p, .privacy-page__content p, .privacy-page__content li { color: var(--body-muted); }
+  .work-type, .progress-meter__labels, .update-entry__date, .book-meta,
+  .direct-contact span, .platform small { color: var(--body-subtle); }
+  .progress-project__status, .edition-card .eyebrow, .voice-meta,
+  .update-entry__meta, .voice-stars { color: var(--sand-light); }
+  .logo-story__line, .email-address:hover, .archive-year:hover, .site-search__result:hover { color: var(--sand-light); }
+
+  .site-search__backdrop { background: rgba(14, 27, 30, 0.78); }
+  .site-search__dialog { background: var(--surface); box-shadow: 0 28px 80px rgba(0, 0, 0, 0.28); }
+  .site-search__field, .update-sort select { border-color: var(--surface-border); background: var(--surface-raised); color: var(--body-text); }
+  .site-search__field input, .site-search__close { color: var(--body-text); }
+  .site-search__field input::placeholder, .site-search__message, .site-search__result span { color: var(--body-subtle); }
+  .site-search__close { border-color: var(--surface-border); }
+  .site-search__close:hover { background: var(--dark-surface-strong); color: var(--on-dark); }
+
+  .hero-copy .lead, .dark-band .lead, .page-intro .lead, .hero-newsletter,
+  .newsletter-invitation__copy > p:first-child, .project-journal-note p,
+  .linktree-panel p, .newsletter-copy p, .newsletter-consent,
+  .newsletter-privacy, .kickstarter-feature p { color: var(--on-dark-muted); }
+  .hero-copy .eyebrow, .dark-band .eyebrow, .page-intro .eyebrow,
+  .newsletter-invitation .eyebrow, .edition-card--dark .eyebrow,
+  .kickstarter-feature .eyebrow, .linktree-panel .eyebrow,
+  .newsletter-copy .eyebrow, .newsletter-copy small,
+  .newsletter-form > label:not(.newsletter-consent), .newsletter-privacy a { color: var(--sand-light); }
+  .home-hero::before, .hero-image-wrap::before, .editorial-image::after { border-color: rgba(213, 224, 221, 0.48); }
+  .home-hero::after { background: radial-gradient(circle, rgba(213, 224, 221, 0.10), transparent 67%); }
+  .dark-band::after, .newsletter-invitation__panel::before, .newsletter-invitation__panel::after, .newsletter-panel::after { border-color: rgba(213, 224, 221, 0.22); }
+  .page-atmosphere, .page-index { color: rgba(213, 224, 221, 0.52); }
+  .page-atmosphere--quote span { color: rgba(213, 224, 221, 0.30); }
+  .page-atmosphere--mechanism span { background: repeating-conic-gradient(from 0deg, rgba(213, 224, 221, 0.10) 0deg 8deg, transparent 8deg 16deg); }
+  .page-atmosphere--letter span:first-child { background: linear-gradient(145deg, transparent 49.5%, rgba(213, 224, 221, 0.26) 50%, transparent 50.5%); }
+  .logo-story__mark img { filter: brightness(0) invert(1) opacity(0.94); }
+
+  .button { background: var(--ink); border-color: var(--ink); color: var(--on-dark); }
+  .button:hover { background: var(--sand-light); border-color: var(--sand-light); color: var(--dark-surface-strong); }
+  .button--light, .newsletter-submit { background: var(--on-dark); border-color: var(--on-dark); color: var(--dark-surface-strong); }
+  .button--light:hover, .newsletter-submit:hover { background: var(--sand-light); border-color: var(--sand-light); color: var(--dark-surface-strong); }
+  .home-hero .button--outline, .edition-card--dark .button--outline, .kickstarter-feature .button--outline { border-color: rgba(247, 243, 236, 0.62); color: var(--on-dark); }
+  .home-hero .button--outline:hover, .edition-card--dark .button--outline:hover, .kickstarter-feature .button--outline:hover { background: var(--sand-light); border-color: var(--sand-light); color: var(--dark-surface-strong); }
+  .hero-caption { background: var(--surface-raised); color: var(--body-text); }
+  .progress-project.progress-project--featured { background: var(--dark-surface); border-color: var(--sand-light); color: var(--on-dark); }
+  .progress-project--featured .progress-project__status, .progress-project--featured .text-link { color: var(--on-dark); }
+  .progress-project--featured .progress-meter__labels { color: var(--on-dark-muted); }
+  .progress-project--featured .progress-meter__track { background: rgba(247, 243, 236, 0.18); }
+  .progress-project--featured .progress-meter__fill { background: var(--sand-light); }
+  .progress-meter__track { background: rgba(247, 243, 236, 0.16); }
+  .text-link { color: var(--body-text); }
+  .progress-project--featured .text-link { color: var(--on-dark); }
+
+  @media (max-width: 960px) {
+    .current-work, .newsletter-invitation { background: var(--paper-deep); }
+    .progress-project, .progress-project:first-child, .progress-project:last-child,
+    .kickstarter-step, .kickstarter-step:first-child, .kickstarter-step:last-child,
+    .concept, .concept:first-child, .concept:last-child,
+    .work-row { border-color: var(--surface-border); background: var(--surface); box-shadow: 0 9px 22px var(--shadow); }
+    .progress-project.progress-project--featured { background: var(--dark-surface); border-color: var(--sand-light); color: var(--on-dark); }
+    .project-card:not(:first-child):not(.project-card--image), .update-project:not(.update-project--dark), .edition-card:not(.edition-card--dark), .voice-card:not(:nth-child(2)):not(:nth-child(3)), .review-category, .updates-feed-inner { background: var(--surface); }
+    .project-card:nth-child(4) { background: var(--surface-soft); }
+    .dark-band .concept, .dark-band .concept:first-child, .dark-band .concept:last-child { border-color: rgba(213, 224, 221, 0.30); background: rgba(247, 243, 236, 0.05); }
+  }
+}
