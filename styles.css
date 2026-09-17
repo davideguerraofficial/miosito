@@ -1,13 +1,13 @@
 :root {
-  color-scheme: only light !important;
-  --ink: #111a1e;
-  --ink-soft: #29363b;
-  --paper: #f4f0e8;
-  --paper-deep: #e8e0d2;
-  --sand: #c2a06e;
-  --sand-light: #d8bd91;
-  --mist: #aeb6b4;
-  --line: rgba(17, 26, 30, 0.14);
+  color-scheme: light dark;
+  --ink: #16383d;
+  --ink-soft: #31585b;
+  --paper: #f7f7f3;
+  --paper-deep: #e8f0ec;
+  --sand: #3b8c7e;
+  --sand-light: #a9d8c8;
+  --mist: #adc4bf;
+  --line: rgba(22, 56, 61, 0.15);
   --serif: "Cormorant Garamond", Georgia, serif;
   --sans: "DM Sans", Arial, sans-serif;
   --page: min(1180px, calc(100% - 48px));
@@ -1142,4 +1142,292 @@ button, a { -webkit-tap-highlight-color: transparent; }
     box-shadow: 0 9px 22px rgba(20, 33, 38, 0.05);
   }
 
+}
+
+/*
+  Palette 01 — Petrolio e salvia
+  A calm, editorial light theme and a legible night theme.  Every decorative
+  accent comes from teal or sage: the previous brown / gold family is retired.
+*/
+:root {
+  --surface: #ffffff;
+  --surface-soft: #eef5f1;
+  --surface-raised: #f9fcfa;
+  --body-text: #15363b;
+  --body-muted: #526b6d;
+  --body-subtle: #71888a;
+  --surface-border: rgba(22, 56, 61, 0.16);
+  --dark-surface: #184148;
+  --dark-surface-strong: #12363b;
+  --on-dark: #f3f8f5;
+  --on-dark-muted: #c6d9d3;
+  --on-dark-line: rgba(169, 216, 200, 0.34);
+  --shadow: rgba(13, 47, 51, 0.10);
+  --muted: var(--body-muted);
+}
+
+html, body { background: var(--paper); color: var(--body-text); }
+
+/* Header, progress and logo */
+.site-header {
+  border-bottom-color: var(--on-dark-line);
+  background: color-mix(in srgb, var(--dark-surface-strong) 96%, transparent);
+  color: var(--on-dark);
+}
+
+.reading-progress { background: linear-gradient(90deg, #3b8c7e, #a9d8c8, #e0f0e9); }
+.brand, .site-nav a:hover, .site-nav a[aria-current="page"], .language-choice:hover { color: var(--on-dark); }
+.site-nav a { color: color-mix(in srgb, var(--on-dark) 76%, transparent); }
+.site-nav a::after { background: var(--sand-light); }
+.site-search-toggle { border-color: color-mix(in srgb, var(--on-dark) 34%, transparent); color: color-mix(in srgb, var(--on-dark) 86%, transparent); }
+.site-search-toggle:hover { border-color: var(--sand-light); background: color-mix(in srgb, var(--sand) 22%, transparent); color: var(--on-dark); }
+.language-switcher { border-color: color-mix(in srgb, var(--on-dark) 30%, transparent); background: color-mix(in srgb, var(--on-dark) 5%, transparent); }
+.language-choice { color: color-mix(in srgb, var(--on-dark) 70%, transparent); }
+.language-choice[aria-pressed="true"] { background: var(--sand-light); color: var(--dark-surface-strong); }
+.menu-toggle { border-color: var(--sand-light); background: color-mix(in srgb, var(--sand) 18%, transparent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--sand) 10%, transparent); color: var(--on-dark); }
+.menu-toggle:hover, .menu-toggle[aria-expanded="true"] { background: var(--sand-light); color: var(--dark-surface-strong); }
+
+/* The mark itself is black, so it always receives a quiet pale seal. */
+.site-header .brand-mark--logo,
+.site-footer .brand-mark--logo {
+  width: 34px;
+  height: 34px;
+  padding: 5px;
+  border: 1px solid color-mix(in srgb, var(--on-dark) 60%, transparent);
+  border-radius: 50%;
+  background: #edf7f1;
+  box-shadow: 0 3px 13px rgba(0, 0, 0, 0.15);
+}
+.site-header .brand-logo, .site-footer .brand-logo { filter: none; }
+.site-header .brand:hover .brand-mark--logo,
+.site-footer .brand:hover .brand-mark--logo { background: #ffffff; transform: rotate(-7deg) scale(1.05); }
+
+/* Readable paper surfaces */
+.lead,
+.work-row p,
+.concept p,
+.editorial-copy p,
+.bio-facts,
+.practice-item p,
+.logo-story > div > p:not(.eyebrow),
+.logo-meanings li,
+.book-copy p,
+.book-meta,
+.review-card p,
+.review-note,
+.update-sort,
+.update-entry__date,
+.update-entry p,
+.update-empty,
+.update-page-label,
+.archive-year p,
+.kickstarter-step p,
+.kickstarter-callout p,
+.direct-contact span,
+.platform small,
+.newsletter-status__card p,
+.privacy-page__content p,
+.privacy-page__content li { color: var(--body-muted); }
+
+.work-type, .progress-meter__labels, .update-entry__date, .book-meta, .direct-contact span, .platform small { color: var(--body-subtle); }
+.logo-story__line, .email-address:hover, .archive-year:hover, .site-search__result:hover { color: var(--sand); }
+
+.site-search__backdrop { background: rgba(8, 35, 38, 0.78); }
+.site-search__dialog { background: var(--paper); box-shadow: 0 28px 80px rgba(9, 42, 45, 0.28); }
+.site-search__field { border-color: var(--surface-border); background: var(--surface); color: var(--body-subtle); }
+.site-search__field:focus-within { border-color: var(--sand); box-shadow: 0 0 0 3px color-mix(in srgb, var(--sand) 20%, transparent); }
+.site-search__field input::placeholder, .site-search__message, .site-search__result span { color: var(--body-subtle); }
+.search-focus::before { border-color: color-mix(in srgb, var(--sand) 55%, transparent); background: linear-gradient(100deg, color-mix(in srgb, var(--sand-light) 10%, transparent), color-mix(in srgb, var(--sand-light) 52%, transparent) 48%, color-mix(in srgb, var(--sand-light) 12%, transparent)); }
+
+.button { color: var(--on-dark); }
+.button:hover { background: var(--sand); border-color: var(--sand); color: #ffffff; }
+.button--outline:hover { color: var(--on-dark); }
+
+/* The recurring dark panels share the same softer petroleum surface. */
+.home-hero,
+.page-intro,
+.dark-band,
+.project-journal-note,
+.newsletter-invitation__panel,
+.progress-project--featured,
+.edition-card--dark,
+.kickstarter-feature,
+.project-card:nth-child(1),
+.update-project--dark,
+.linktree-panel,
+.newsletter-panel { background: var(--dark-surface); color: var(--on-dark); }
+
+.site-footer { background: var(--dark-surface-strong); color: color-mix(in srgb, var(--on-dark) 78%, transparent); }
+.home-hero::before, .hero-image-wrap::before, .editorial-image::after { border-color: color-mix(in srgb, var(--sand-light) 62%, transparent); }
+.home-hero::after { background: radial-gradient(circle, color-mix(in srgb, var(--sand) 22%, transparent), transparent 67%); }
+.dark-band::after { border-color: color-mix(in srgb, var(--sand-light) 34%, transparent); }
+.page-atmosphere { color: color-mix(in srgb, var(--sand-light) 52%, transparent); }
+.page-atmosphere--quote span { color: color-mix(in srgb, var(--sand-light) 42%, transparent); }
+.page-index { color: var(--sand-light); }
+.page-atmosphere--mechanism span { background: repeating-conic-gradient(from 0deg, color-mix(in srgb, var(--sand-light) 15%, transparent) 0deg 8deg, transparent 8deg 16deg); }
+.page-atmosphere--letter span:first-child { background: linear-gradient(145deg, transparent 49.5%, color-mix(in srgb, var(--sand-light) 35%, transparent) 50%, transparent 50.5%); }
+.page-atmosphere--book span:first-child { background: linear-gradient(135deg, color-mix(in srgb, var(--on-dark) 11%, transparent), transparent); }
+.page-atmosphere--book span:nth-child(2), .page-atmosphere--letter span:last-child { border-color: color-mix(in srgb, var(--on-dark) 19%, transparent); }
+
+.hero-copy .lead,
+.dark-band .lead,
+.page-intro .lead,
+.hero-newsletter,
+.newsletter-invitation__copy > p:first-child,
+.progress-project--featured .progress-meter__labels,
+.project-journal-note p,
+.linktree-panel p,
+.newsletter-copy p,
+.newsletter-consent,
+.newsletter-privacy,
+.kickstarter-feature p { color: var(--on-dark-muted); }
+.hero-copy .eyebrow,
+.dark-band .eyebrow,
+.page-intro .eyebrow,
+.newsletter-invitation .eyebrow,
+.progress-project--featured .progress-project__status,
+.edition-card--dark .eyebrow,
+.kickstarter-feature .eyebrow,
+.linktree-panel .eyebrow,
+.newsletter-copy .eyebrow,
+.newsletter-copy small,
+.newsletter-form > label:not(.newsletter-consent),
+.newsletter-privacy a { color: var(--sand-light); }
+.hero-newsletter { border-color: color-mix(in srgb, var(--sand-light) 50%, transparent); }
+.hero-newsletter span:nth-child(3), .hero-newsletter b, .hero-newsletter__pulse { color: var(--sand-light); }
+.hero-newsletter__pulse { background: var(--sand-light); }
+.hero-newsletter__pulse::after { border-color: var(--sand-light); }
+.home-hero .button--outline,
+.edition-card--dark .button--outline,
+.kickstarter-feature .button--outline { border-color: color-mix(in srgb, var(--on-dark) 62%, transparent); color: var(--on-dark); }
+.home-hero .button--outline:hover,
+.edition-card--dark .button--outline:hover,
+.kickstarter-feature .button--outline:hover { border-color: var(--sand-light); background: var(--sand-light); color: var(--dark-surface-strong); }
+.progress-project--featured .text-link { color: var(--on-dark); }
+.progress-project--featured .text-link:hover { color: var(--sand-light); }
+.progress-project--featured .progress-meter__track { background: color-mix(in srgb, var(--on-dark) 19%, transparent); }
+.progress-project--featured .progress-meter__fill { background: var(--sand-light); }
+
+/* Light cards are deliberately close in tone, but always separated by a calm border. */
+.logo-story,
+.review-category,
+.voice-card,
+.update-project,
+.updates-feed-inner,
+.edition-card,
+.project-card,
+.kickstarter-callout { border-color: var(--surface-border); background: var(--surface-soft); color: var(--body-text); }
+.project-card:nth-child(4) { background: #e2f0e9; }
+.review-card, .newsletter-status__card { border-color: var(--surface-border); background: var(--surface); }
+.current-work, .newsletter-invitation { background: var(--paper-deep); }
+.current-work::before { border-color: color-mix(in srgb, var(--ink) 12%, transparent); }
+.newsletter-invitation__panel { border-color: color-mix(in srgb, var(--sand-light) 72%, transparent); }
+.newsletter-invitation__panel::before, .newsletter-invitation__panel::after, .newsletter-panel::after { border-color: color-mix(in srgb, var(--sand-light) 34%, transparent); }
+.privacy-page__aside { background: color-mix(in srgb, var(--sand-light) 25%, transparent); }
+
+.review-card::before, .update-project::before, .project-card::before,
+.progress-project__status, .edition-card .eyebrow, .voice-meta,
+.update-entry__meta { color: var(--sand); }
+.voice-stars { color: var(--sand); }
+.review-card:hover, .update-project:hover, .project-card:hover { border-color: var(--sand); box-shadow: 0 18px 38px var(--shadow); }
+.progress-meter__track { background: color-mix(in srgb, var(--ink) 14%, transparent); }
+.progress-meter__fill { background: var(--sand); }
+.update-filter, .update-pagination button, .update-sort select { border-color: color-mix(in srgb, var(--ink) 30%, transparent); background: transparent; color: var(--body-text); }
+.update-filter:hover, .update-filter[aria-pressed="true"], .update-pagination button:hover:not(:disabled) { border-color: var(--ink); background: var(--ink); color: var(--on-dark); }
+.update-sort select { background: var(--surface); }
+.social-icon { border-color: color-mix(in srgb, var(--on-dark) 34%, transparent); color: var(--on-dark); }
+.social-icon:hover { border-color: var(--sand-light); background: var(--sand-light); color: var(--dark-surface-strong); }
+.footer-top { border-color: color-mix(in srgb, var(--on-dark) 18%, transparent); }
+.footer-bottom { color: color-mix(in srgb, var(--on-dark) 60%, transparent); }
+
+/* The existing mobile card layout keeps the same clear separation in the new palette. */
+@media (max-width: 960px) {
+  :root {
+    --ink: #16383d;
+    --ink-soft: #31585b;
+    --paper: #f7f7f3;
+    --paper-deep: #e8f0ec;
+    --sand: #3b8c7e;
+    --sand-light: #a9d8c8;
+    --line: rgba(22, 56, 61, 0.15);
+  }
+
+  .progress-project, .progress-project:first-child, .progress-project:last-child,
+  .kickstarter-step, .kickstarter-step:first-child, .kickstarter-step:last-child,
+  .concept, .concept:first-child, .concept:last-child,
+  .work-row { border-color: var(--surface-border); background: var(--surface); box-shadow: 0 9px 22px var(--shadow); }
+  .project-card, .update-project, .edition-card, .voice-card, .review-category, .updates-feed-inner { border-color: var(--surface-border); box-shadow: 0 9px 22px var(--shadow); }
+  .project-card:not(:first-child):not(.project-card--image), .update-project:not(.update-project--dark), .edition-card:not(.edition-card--dark), .voice-card:not(:nth-child(2)):not(:nth-child(3)), .review-category, .updates-feed-inner { background: var(--surface); }
+  .project-card:nth-child(4) { background: #e2f0e9; }
+  .dark-band .concept, .dark-band .concept:first-child, .dark-band .concept:last-child { border-color: var(--on-dark-line); background: color-mix(in srgb, var(--on-dark) 6%, transparent); box-shadow: none; }
+}
+
+/* Night mode follows the phone setting: brighter petroleum surfaces, never black. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --ink: #234c52;
+    --ink-soft: #3a666a;
+    --paper: #1d3e43;
+    --paper-deep: #24494e;
+    --sand: #79c3b1;
+    --sand-light: #bae2d4;
+    --mist: #a9c9c1;
+    --line: rgba(232, 247, 241, 0.16);
+    --surface: #2a5359;
+    --surface-soft: #315d62;
+    --surface-raised: #38666a;
+    --body-text: #f0f7f3;
+    --body-muted: #c8d9d4;
+    --body-subtle: #a9c4be;
+    --surface-border: rgba(230, 246, 239, 0.20);
+    --dark-surface: #193a3f;
+    --dark-surface-strong: #143237;
+    --on-dark: #f4faf6;
+    --on-dark-muted: #cde0d9;
+    --on-dark-line: rgba(186, 226, 212, 0.34);
+    --shadow: rgba(5, 24, 27, 0.22);
+  }
+
+  html, body { background: var(--paper); color: var(--body-text); }
+  .site-header { background: color-mix(in srgb, var(--dark-surface-strong) 97%, transparent); }
+  .site-search__dialog { background: var(--surface); }
+  .site-search__field, .update-sort select { background: var(--surface-raised); color: var(--body-text); }
+  .site-search__field input { color: var(--body-text); }
+  .site-search__close { border-color: var(--surface-border); color: var(--body-text); }
+  .site-search__close:hover { background: var(--dark-surface-strong); color: var(--on-dark); }
+
+  .logo-story, .review-category, .voice-card, .update-project,
+  .updates-feed-inner, .edition-card, .project-card, .kickstarter-callout,
+  .review-card, .newsletter-status__card { background: var(--surface); color: var(--body-text); }
+  .project-card:nth-child(4) { background: var(--surface-soft); }
+  .current-work, .newsletter-invitation { background: var(--paper-deep); }
+  .privacy-page__aside { background: color-mix(in srgb, var(--sand) 16%, var(--surface)); }
+  .newsletter-status__card::before { border-color: color-mix(in srgb, var(--sand-light) 45%, transparent); }
+
+  .work-type, .progress-meter__labels, .update-entry__date, .book-meta,
+  .direct-contact span, .platform small { color: var(--body-subtle); }
+  .lead, .work-row p, .concept p, .editorial-copy p, .bio-facts,
+  .practice-item p, .logo-story > div > p:not(.eyebrow), .logo-meanings li,
+  .book-copy p, .review-card p, .review-note, .update-entry p,
+  .archive-year p, .kickstarter-step p, .kickstarter-callout p { color: var(--body-muted); }
+  .update-filter, .update-pagination button, .update-sort select { border-color: var(--surface-border); color: var(--body-text); }
+  .progress-meter__track { background: color-mix(in srgb, var(--on-dark) 15%, transparent); }
+  .project-card--image::after { background: linear-gradient(180deg, color-mix(in srgb, var(--dark-surface-strong) 8%, transparent), color-mix(in srgb, var(--dark-surface-strong) 92%, transparent)); }
+  .kickstarter-feature::before { background: linear-gradient(90deg, color-mix(in srgb, var(--dark-surface-strong) 97%, transparent) 0%, color-mix(in srgb, var(--dark-surface-strong) 80%, transparent) 50%, color-mix(in srgb, var(--dark-surface-strong) 25%, transparent) 100%); }
+  .hero-caption { background: var(--surface-raised); color: var(--body-text); }
+  .button--light, .newsletter-submit { border-color: var(--on-dark); background: var(--on-dark); color: var(--dark-surface-strong); }
+  .button--light:hover, .newsletter-submit:hover { border-color: var(--sand-light); background: var(--sand-light); color: var(--dark-surface-strong); }
+
+  .site-footer { background: var(--dark-surface-strong); }
+
+  @media (max-width: 960px) {
+    .progress-project, .progress-project:first-child, .progress-project:last-child,
+    .kickstarter-step, .kickstarter-step:first-child, .kickstarter-step:last-child,
+    .concept, .concept:first-child, .concept:last-child,
+    .work-row { border-color: var(--surface-border); background: var(--surface); box-shadow: 0 9px 22px var(--shadow); }
+    .progress-project.progress-project--featured { border-color: var(--sand-light); background: var(--dark-surface); }
+    .project-card:not(:first-child):not(.project-card--image), .update-project:not(.update-project--dark), .edition-card:not(.edition-card--dark), .voice-card:not(:nth-child(2)):not(:nth-child(3)), .review-category, .updates-feed-inner { background: var(--surface); }
+    .project-card:nth-child(4) { background: var(--surface-soft); }
+  }
 }

@@ -224,15 +224,15 @@ function ensureFavicon() {
   icon.href = `${assetPrefix}img/logo-dg.png?v=20260915-2`;
 }
 
-function ensureLightColourScheme() {
+function ensureColourScheme() {
   let scheme = document.querySelector('meta[name="color-scheme"]');
   if (!scheme) {
     scheme = document.createElement('meta');
     scheme.name = 'color-scheme';
     document.head.append(scheme);
   }
-  scheme.content = 'light';
-  document.documentElement.style.colorScheme = 'only light';
+  scheme.content = 'light dark';
+  document.documentElement.style.colorScheme = '';
 }
 
 function applyBrandLogo() {
@@ -830,7 +830,7 @@ if (toggle && nav) {
 
 enhanceMotion();
 
-ensureLightColourScheme();
+ensureColourScheme();
 ensureFavicon();
 applyBrandLogo();
 updateFooterTone();
