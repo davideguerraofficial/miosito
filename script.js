@@ -54,8 +54,6 @@ function getPageNameFromPath(pathname = currentPath) {
 
 const pageName = getPageNameFromPath();
 const languageKey = 'davide-guerra-language';
-const themePreferenceKey = 'davide-guerra-theme';
-const systemThemeQuery = window.matchMedia('(prefers-color-scheme: dark)');
 const updatePageNames = new Set([
   'aggiornamenti.html',
   'diario-arte-della-solitudine.html',
@@ -76,49 +74,6 @@ function saveLanguage(language) {
   } catch {
     // The site remains usable when browser storage is unavailable.
   }
-}
-
-function readThemePreference() {
-  try {
-    const savedTheme = window.localStorage.getItem(themePreferenceKey);
-    return ['light', 'dark', 'system'].includes(savedTheme) ? savedTheme : 'system';
-  } catch {
-    return 'system';
-  }
-}
-
-let themePreference = readThemePreference();
-let themeSwitcher;
-
-function resolvedTheme() {
-  return themePreference === 'system'
-    ? (systemThemeQuery.matches ? 'dark' : 'light')
-    : themePreference;
-}
-
-function applyThemePreference() {
-  const isDark = resolvedTheme() === 'dark';
-  document.documentElement.classList.toggle('theme-dark', isDark);
-  document.documentElement.dataset.themePreference = themePreference;
-
-  let themeColor = document.querySelector('meta[name="theme-color"]');
-  if (!themeColor) {
-    themeColor = document.createElement('meta');
-    themeColor.name = 'theme-color';
-    document.head.append(themeColor);
-  }
-  themeColor.content = isDark ? '#1d353b' : '#111a1e';
-  updateThemeSwitcher();
-}
-
-function saveThemePreference(preference) {
-  themePreference = preference;
-  try {
-    window.localStorage.setItem(themePreferenceKey, preference);
-  } catch {
-    // The site can still follow the selected theme while storage is unavailable.
-  }
-  applyThemePreference();
 }
 
 // The URL is the single source of truth for the language. Keeping this tied to
@@ -147,6 +102,13 @@ function normaliseInternalLinks(scope = document) {
 }
 
 normaliseLegacyAddress();
+document.documentElement.classList.remove('theme-dark');
+document.documentElement.removeAttribute('data-theme-preference');
+try {
+  window.localStorage.removeItem('davide-guerra-theme');
+} catch {
+  // The retired preference is harmless when browser storage is unavailable.
+}
 let switcher;
 let searchPanel;
 let searchInput;
@@ -216,41 +178,6 @@ function updateSwitcher() {
     </button>`;
 }
 
-function updateThemeSwitcher() {
-  if (!themeSwitcher) return;
-  const isEnglish = currentLanguage === 'en';
-  const labels = isEnglish
-    ? { system: 'System', light: 'Light', dark: 'Night', menu: 'Colour theme' }
-    : { system: 'Sistema', light: 'Chiaro', dark: 'Notte', menu: 'Tema colori' };
-  const icon = resolvedTheme() === 'dark' ? 'fa-moon' : 'fa-sun';
-  const current = labels[themePreference];
-
-  themeSwitcher.innerHTML = `
-    <summary class="theme-switcher__toggle" aria-label="${labels.menu}: ${current}">
-      <i class="fa-solid ${icon}" aria-hidden="true"></i><span class="theme-switcher__label">${isEnglish ? 'Theme' : 'Tema'}</span>
-    </summary>
-    <div class="theme-switcher__panel" role="group" aria-label="${labels.menu}">
-      <p>${labels.menu}</p>
-      <button type="button" data-theme-choice="system" aria-pressed="${themePreference === 'system'}"><i class="fa-solid fa-desktop" aria-hidden="true"></i>${labels.system}</button>
-      <button type="button" data-theme-choice="light" aria-pressed="${themePreference === 'light'}"><i class="fa-solid fa-sun" aria-hidden="true"></i>${labels.light}</button>
-      <button type="button" data-theme-choice="dark" aria-pressed="${themePreference === 'dark'}"><i class="fa-solid fa-moon" aria-hidden="true"></i>${labels.dark}</button>
-    </div>`;
-}
-
-function setupThemeSwitcher() {
-  if (!headerInner || !toggle || themeSwitcher) return;
-  themeSwitcher = document.createElement('details');
-  themeSwitcher.className = 'theme-switcher';
-  themeSwitcher.addEventListener('click', (event) => {
-    const button = event.target.closest('[data-theme-choice]');
-    if (!button) return;
-    saveThemePreference(button.dataset.themeChoice);
-    themeSwitcher.removeAttribute('open');
-  });
-  headerInner.insertBefore(themeSwitcher, switcher || toggle);
-  updateThemeSwitcher();
-}
-
 function ensureUpdatesLink(language = currentLanguage) {
   const navigationList = nav?.querySelector('ul');
   if (!navigationList) return;
@@ -295,6 +222,17 @@ function ensureFavicon() {
   }
   icon.type = 'image/png';
   icon.href = `${assetPrefix}img/logo-dg.png?v=20260915-2`;
+}
+
+function ensureLightColourScheme() {
+  let scheme = document.querySelector('meta[name="color-scheme"]');
+  if (!scheme) {
+    scheme = document.createElement('meta');
+    scheme.name = 'color-scheme';
+    document.head.append(scheme);
+  }
+  scheme.content = 'light';
+  document.documentElement.style.colorScheme = 'only light';
 }
 
 function applyBrandLogo() {
@@ -869,21 +807,8 @@ if (headerInner && toggle) {
   });
   headerInner.insertBefore(switcher, toggle);
   updateSwitcher();
-  setupThemeSwitcher();
   ensureUpdatesLink();
   ensureReviewsLink();
-}
-
-applyThemePreference();
-
-const refreshSystemTheme = () => {
-  if (themePreference === 'system') applyThemePreference();
-};
-
-if (typeof systemThemeQuery.addEventListener === 'function') {
-  systemThemeQuery.addEventListener('change', refreshSystemTheme);
-} else {
-  systemThemeQuery.addListener(refreshSystemTheme);
 }
 
 setupMobileMenuLabel();
@@ -905,6 +830,7 @@ if (toggle && nav) {
 
 enhanceMotion();
 
+ensureLightColourScheme();
 ensureFavicon();
 applyBrandLogo();
 updateFooterTone();

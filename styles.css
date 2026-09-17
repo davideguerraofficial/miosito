@@ -1,5 +1,5 @@
 :root {
-  color-scheme: light;
+  color-scheme: only light !important;
   --ink: #111a1e;
   --ink-soft: #29363b;
   --paper: #f4f0e8;
@@ -1132,142 +1132,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .concept:last-child { padding: 23px; }
 }
 
-/* Theme chooser: the preference is saved on this device, while “System” follows the phone. */
-.theme-switcher { position: relative; flex: 0 0 auto; margin-left: 12px; order: 4; }
-.theme-switcher > summary { list-style: none; }
-.theme-switcher > summary::-webkit-details-marker { display: none; }
-.theme-switcher__toggle { min-width: 38px; height: 36px; display: inline-flex; align-items: center; justify-content: center; gap: 7px; padding: 0 10px; border: 1px solid rgba(255, 255, 255, 0.3); background: rgba(255, 255, 255, 0.04); color: rgba(255, 255, 255, 0.9); cursor: pointer; font-family: var(--sans); font-size: 0.63rem; font-weight: 700; letter-spacing: 0.09em; line-height: 1; text-transform: uppercase; transition: border-color 180ms ease, background-color 180ms ease, color 180ms ease; }
-.theme-switcher__toggle:hover, .theme-switcher[open] .theme-switcher__toggle { border-color: var(--sand-light); background: rgba(216, 189, 145, 0.14); color: #fff; }
-.theme-switcher__panel { position: absolute; z-index: 60; top: calc(100% + 10px); right: 0; width: 176px; padding: 9px; border: 1px solid rgba(244, 240, 232, 0.23); background: #1b2c31; box-shadow: 0 16px 34px rgba(5, 13, 16, 0.26); }
-.theme-switcher__panel p { margin: 4px 7px 8px; color: rgba(244, 240, 232, 0.62); font-size: 0.6rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
-.theme-switcher__panel button { width: 100%; display: flex; align-items: center; gap: 9px; min-height: 35px; padding: 0 8px; border: 0; background: transparent; color: rgba(244, 240, 232, 0.78); cursor: pointer; font: 700 0.68rem var(--sans); letter-spacing: 0.06em; text-align: left; }
-.theme-switcher__panel button i { width: 15px; color: var(--sand-light); text-align: center; }
-.theme-switcher__panel button:hover, .theme-switcher__panel button[aria-pressed="true"] { background: rgba(169, 217, 213, 0.15); color: #fff; }
-
-/* Night is petrol-blue and calm, rather than a darker copy of the beige daytime palette. */
-:root.theme-dark {
-  color-scheme: dark;
-  --ink: #e7f0f0;
-  --ink-soft: #c7d6d7;
-  --paper: #22383e;
-  --paper-deep: #2a4349;
-  --sand: #7eb7b8;
-  --sand-light: #a9d9d5;
-  --mist: #a9c0c1;
-  --line: rgba(224, 241, 240, 0.2);
-  --night-deep: #1d3339;
-  --night-surface: #2b454b;
-  --night-surface-raised: #345159;
-  --night-copy: #c8d7d8;
-  --night-text: #edf5f4;
-}
-
-.theme-dark html,
-.theme-dark body { background: var(--paper); color: var(--ink); }
-
-.theme-dark .site-header { border-color: rgba(224, 241, 240, 0.17); background: rgba(28, 49, 56, 0.98); }
-.theme-dark .site-footer { background: #172b31; }
-.theme-dark .site-header .brand-mark--logo,
-.theme-dark .site-footer .brand-mark--logo { border-color: rgba(237, 245, 244, 0.72); background: #edf5f4; box-shadow: 0 3px 12px rgba(5, 16, 20, 0.22); }
-.theme-dark .site-header .brand-logo,
-.theme-dark .site-footer .brand-logo { filter: none; }
-
-.theme-dark .home-hero,
-.theme-dark .page-intro,
-.theme-dark .dark-band,
-.theme-dark .newsletter-invitation__panel,
-.theme-dark .progress-project.progress-project--featured,
-.theme-dark .update-project--dark,
-.theme-dark .edition-card--dark,
-.theme-dark .kickstarter-feature,
-.theme-dark .project-journal-note,
-.theme-dark .linktree-panel,
-.theme-dark .newsletter-panel,
-.theme-dark .voice-card:nth-child(2),
-.theme-dark .voice-card:nth-child(3),
-.theme-dark .project-card:nth-child(1) { background: var(--night-deep); color: var(--night-text); }
-
-.theme-dark .dark-band { background: #274248; }
-.theme-dark .home-hero::before { background: radial-gradient(circle, rgba(126, 183, 184, 0.12), transparent 68%); }
-.theme-dark .hero-caption { background: #edf5f4; color: #1d3339; }
-.theme-dark .home-hero .button--outline,
-.theme-dark .edition-card--dark .button--outline,
-.theme-dark .kickstarter-feature .button--outline { border-color: rgba(237, 245, 244, 0.68); color: var(--night-text); }
-.theme-dark .home-hero .button--outline:hover,
-.theme-dark .edition-card--dark .button--outline:hover,
-.theme-dark .kickstarter-feature .button--outline:hover { border-color: var(--night-text); background: var(--night-text); color: var(--night-deep); }
-
-.theme-dark .current-work,
-.theme-dark .newsletter-invitation { background: #29434a; }
-.theme-dark .current-work::before { border-color: rgba(169, 217, 213, 0.22); }
-.theme-dark .logo-story,
-.theme-dark .review-category,
-.theme-dark .voice-card:not(:nth-child(2)):not(:nth-child(3)),
-.theme-dark .update-project:not(.update-project--dark),
-.theme-dark .edition-card:not(.edition-card--dark),
-.theme-dark .project-card:not(:nth-child(1)):not(.project-card--image),
-.theme-dark .project-card:nth-child(4),
-.theme-dark .kickstarter-callout { background: var(--night-surface); }
-.theme-dark .logo-story__mark img { filter: brightness(0) invert(1); }
-
-.theme-dark .work-row { border-color: var(--line); }
-.theme-dark .work-type,
-.theme-dark .work-row p,
-.theme-dark .concept p,
-.theme-dark .editorial-copy p,
-.theme-dark .bio-facts,
-.theme-dark .practice-item p,
-.theme-dark .logo-story > div > p:not(.eyebrow),
-.theme-dark .logo-meanings li,
-.theme-dark .book-copy p,
-.theme-dark .book-meta,
-.theme-dark .review-card p,
-.theme-dark .review-note,
-.theme-dark .kickstarter-step p,
-.theme-dark .kickstarter-callout p,
-.theme-dark .direct-contact span,
-.theme-dark .platform small,
-.theme-dark .update-entry__content p,
-.theme-dark .newsletter-status__card p,
-.theme-dark .privacy-page__content p,
-.theme-dark .privacy-page__content li { color: var(--night-copy); }
-.theme-dark .logo-story__line,
-.theme-dark .email-address:hover { color: var(--sand-light); }
-
-.theme-dark .review-card,
-.theme-dark .updates-feed-inner,
-.theme-dark .newsletter-status__card,
-.theme-dark .site-search__dialog { background: var(--night-surface-raised); }
-.theme-dark .site-search__field { border-color: rgba(224, 241, 240, 0.35); background: rgba(18, 35, 40, 0.56); color: var(--night-copy); }
-.theme-dark .site-search__field input { color: var(--night-text); }
-.theme-dark .site-search__close { border-color: rgba(224, 241, 240, 0.38); color: var(--night-text); }
-.theme-dark .site-search__close:hover { background: var(--night-text); color: var(--night-deep); }
-
-.theme-dark .button--light,
-.theme-dark .newsletter-submit { border-color: var(--night-text); background: var(--night-text); color: var(--night-deep); }
-.theme-dark .button--light:hover,
-.theme-dark .newsletter-submit:hover { border-color: var(--sand-light); background: var(--sand-light); color: var(--night-deep); }
-.theme-dark .button--outline { border-color: rgba(231, 240, 240, 0.72); color: var(--night-text); }
-.theme-dark .button--outline:hover { border-color: var(--night-text); background: var(--night-text); color: var(--night-deep); }
-.theme-dark .newsletter-form > input[type="email"] { border-color: rgba(237, 245, 244, 0.5); background: rgba(237, 245, 244, 0.08); color: var(--night-text); }
-
-.theme-dark .page-index,
-.theme-dark .page-atmosphere { color: rgba(169, 217, 213, 0.58); }
-.theme-dark .page-atmosphere--mechanism span { background: repeating-conic-gradient(from 0deg, rgba(169, 217, 213, 0.15) 0deg 8deg, transparent 8deg 16deg); }
-.theme-dark .page-atmosphere--quote span { color: rgba(169, 217, 213, 0.34); }
-.theme-dark .page-atmosphere--letter span:first-child { background: linear-gradient(145deg, transparent 49.5%, rgba(169, 217, 213, 0.34) 50%, transparent 50.5%); }
-.theme-dark .dark-band::after,
-.theme-dark .newsletter-invitation__panel::before,
-.theme-dark .newsletter-invitation__panel::after,
-.theme-dark .newsletter-panel::after { border-color: rgba(169, 217, 213, 0.28); }
-
 @media (max-width: 960px) {
-  .theme-switcher { margin-left: auto; margin-right: 0; order: 2; }
-  .theme-switcher__toggle { width: 36px; min-width: 36px; padding: 0; }
-  .theme-switcher__label { display: none; }
-  .language-switcher { margin-left: 0; margin-right: 8px; order: 3; }
-  .menu-toggle { order: 4; }
-
   /* “In primo piano” becomes two distinct cards on a phone, like the projects below it. */
   .work-list { gap: 14px; border: 0; }
   .work-row {
@@ -1277,5 +1142,4 @@ button, a { -webkit-tap-highlight-color: transparent; }
     box-shadow: 0 9px 22px rgba(20, 33, 38, 0.05);
   }
 
-  .theme-dark .work-row { border-color: var(--line); background: var(--night-surface); box-shadow: 0 9px 22px rgba(5, 16, 20, 0.14); }
 }
