@@ -1,10 +1,59 @@
 const toggle = document.querySelector('.menu-toggle');
 const nav = document.querySelector('.site-nav');
 const headerInner = document.querySelector('.header-inner');
-const pathLeaf = window.location.pathname.split('/').pop();
-const pageName = !pathLeaf || pathLeaf === 'en' ? 'index.html' : pathLeaf;
+const currentPath = window.location.pathname;
+const isEnglishPath = /^\/en(?:\/|$)/.test(currentPath);
+const cleanRoutes = {
+  it: {
+    'index.html': '',
+    'chi-sono.html': 'autore',
+    'libri.html': 'opere',
+    'progetti.html': 'progetti',
+    'kickstarter.html': 'kickstarter',
+    'aggiornamenti.html': 'aggiornamenti',
+    'diario-arte-della-solitudine.html': 'diario/arte-della-solitudine',
+    'diario-daniel-belmont.html': 'diario/daniel-belmont',
+    'recensioni.html': 'recensioni',
+    'contatti.html': 'contatti',
+    'privacy.html': 'privacy',
+    'newsletter-check-email.html': 'newsletter/controlla-email',
+    'newsletter-confirmed.html': 'newsletter/confermata'
+  },
+  en: {
+    'index.html': '',
+    'chi-sono.html': 'author',
+    'libri.html': 'books',
+    'progetti.html': 'projects',
+    'kickstarter.html': 'kickstarter',
+    'aggiornamenti.html': 'updates',
+    'diario-arte-della-solitudine.html': 'journal/art-of-solitude',
+    'diario-daniel-belmont.html': 'journal/daniel-belmont',
+    'recensioni.html': 'reviews',
+    'contatti.html': 'contact',
+    'privacy.html': 'privacy',
+    'newsletter-check-email.html': 'newsletter/check-email',
+    'newsletter-confirmed.html': 'newsletter/confirmed'
+  }
+};
+
+function getCleanPath(fileName, language = isEnglishPath ? 'en' : 'it') {
+  const route = cleanRoutes[language][fileName] ?? fileName.replace(/\.html$/i, '');
+  const prefix = language === 'en' ? '/en' : '';
+  return route ? `${prefix}/${route}/` : `${prefix}/`;
+}
+
+function getPageNameFromPath(pathname = currentPath) {
+  const language = /^\/en(?:\/|$)/.test(pathname) ? 'en' : 'it';
+  const withoutLanguage = language === 'en' ? pathname.replace(/^\/en\/?/, '') : pathname.replace(/^\//, '');
+  const route = withoutLanguage.replace(/^\/|\/$/g, '');
+  if (!route || route === 'index.html') return 'index.html';
+  if (route.endsWith('.html')) return route.split('/').pop();
+  return Object.entries(cleanRoutes[language]).find(([, cleanRoute]) => cleanRoute === route)?.[0]
+    ?? `${route.split('/').pop()}.html`;
+}
+
+const pageName = getPageNameFromPath();
 const languageKey = 'davide-guerra-language';
-const isEnglishPath = /\/en(?:\/|$)/.test(window.location.pathname);
 const updatePageNames = new Set([
   'aggiornamenti.html',
   'diario-arte-della-solitudine.html',
@@ -27,10 +76,32 @@ function saveLanguage(language) {
   }
 }
 
-// Pages opened directly from /en/ must identify themselves as English before
-// reading a preference saved on another page. Otherwise an English page could
-// display Italian as the selected option and make the switcher appear stuck.
-let currentLanguage = isEnglishPath ? 'en' : readLanguage();
+// The URL is the single source of truth for the language. Keeping this tied to
+// the page path avoids a race where a stored preference could replace the page
+// after the user had already chosen the other language.
+let currentLanguage = isEnglishPath ? 'en' : 'it';
+
+function normaliseLegacyAddress() {
+  if (!currentPath.endsWith('.html')) return;
+  const cleanPath = getCleanPath(pageName, currentLanguage);
+  window.history.replaceState({}, '', `${cleanPath}${window.location.search}${window.location.hash}`);
+}
+
+function normaliseInternalLinks(scope = document) {
+  scope.querySelectorAll('a[href]').forEach((anchor) => {
+    const reference = anchor.getAttribute('href');
+    if (!reference || reference.startsWith('#')) return;
+
+    const destination = new URL(reference, document.baseURI);
+    if (destination.origin !== window.location.origin || !destination.pathname.endsWith('.html')) return;
+
+    const language = /^\/en(?:\/|$)/.test(destination.pathname) ? 'en' : 'it';
+    const fileName = destination.pathname.split('/').pop();
+    anchor.setAttribute('href', `${getCleanPath(fileName, language)}${destination.search}${destination.hash}`);
+  });
+}
+
+normaliseLegacyAddress();
 let switcher;
 let searchPanel;
 let searchInput;
@@ -232,7 +303,7 @@ function selectSearchSummary(entry, words) {
 }
 
 function buildSearchResultLink(path, query, segmentIndex) {
-  const destination = new URL(path, window.location.href);
+  const destination = new URL(getCleanPath(path, currentLanguage), window.location.origin);
   destination.searchParams.set('cerca', query);
   if (segmentIndex >= 0) destination.searchParams.set('punto', String(segmentIndex));
   return destination.href;
@@ -296,7 +367,7 @@ function updateSearchLabels() {
 async function getSearchEntries(language) {
   if (searchCache.has(language)) return searchCache.get(language);
 
-  const prefix = language === 'en' ? 'en/' : '';
+  const prefix = language === 'en' ? '/en/' : '/';
   const entries = await Promise.all(searchPages.map(async (path) => {
     try {
       const response = await fetch(`${prefix}${path}`, { cache: 'no-cache' });
@@ -503,6 +574,7 @@ function copyPageContent(source, language) {
   ensureUpdatesLink(language);
   ensureReviewsLink(language);
   addSearchToNavigation();
+  normaliseInternalLinks(document);
 
   document.documentElement.lang = language;
   document.title = source.title;
@@ -686,16 +758,12 @@ async function changeLanguage(language, initialLoad = false) {
 
   if (!initialLoad) {
     saveLanguage(language);
-    const destination = language === 'en'
-      ? (isEnglishPath ? pageName : `en/${pageName}`)
-      : (isEnglishPath ? `../${pageName}` : pageName);
-
-    window.location.assign(`${destination}${window.location.search}${window.location.hash}`);
+    window.location.assign(`${getCleanPath(pageName, language)}${window.location.search}${window.location.hash}`);
     return;
   }
 
   try {
-    const sourcePath = language === 'en' ? `en/${pageName}` : pageName;
+    const sourcePath = language === 'en' ? `/en/${pageName}` : `/${pageName}`;
     const response = await fetch(sourcePath, { cache: 'no-cache' });
     if (!response.ok) throw new Error('Translation file could not be loaded.');
 
@@ -742,8 +810,7 @@ if (toggle && nav) {
   });
 }
 
-if (currentLanguage === 'en' && !isEnglishPath) changeLanguage('en', true);
-else enhanceMotion();
+enhanceMotion();
 
 ensureFavicon();
 applyBrandLogo();
@@ -754,4 +821,5 @@ normalizePageNumber();
 setupPageAtmosphere();
 setupReadingProgress();
 setupUpdatesFeed();
+normaliseInternalLinks();
 if (currentLanguage !== 'en') focusSearchResult();

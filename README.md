@@ -21,3 +21,10 @@ Sito statico in italiano, pronto per GitHub Pages. Le pagine principali sono:
 - `img/profilo.jpeg` — ritratto dell'autore.
 - `img/copertina-solitudine.jpg` — copertina di *L'Arte della Solitudine*.
 - `img/copertina-belmont.avif` — immagine provvisoria di Kickstarter per *Daniel Belmont*. Il file originale era un AVIF con estensione `.jpg`: è stato rinominato per consentire una corretta pubblicazione.
+## URL puliti
+
+Le pagine pubbliche usano indirizzi senza `.html`, ad esempio `davideguerra.com/opere/` e `davideguerra.com/en/books/`.
+
+I file principali restano nella cartella del sito (`libri.html`, `en/libri.html` e così via). Le cartelle con gli URL puliti vengono generate automaticamente: dopo ogni modifica a una pagina, esegui `node build-clean-urls.js` prima di caricare il sito su GitHub.
+
+Per una pagina futura, ad esempio `nuovo-progetto.html`, il generatore creerà automaticamente `/nuovo-progetto/` e, per la versione inglese, `/en/nuovo-progetto/`. I percorsi speciali già esistenti sono raccolti all’inizio di `build-clean-urls.js`.
