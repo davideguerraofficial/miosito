@@ -231,8 +231,8 @@ function ensureColourScheme() {
     scheme.name = 'color-scheme';
     document.head.append(scheme);
   }
-  scheme.content = 'light dark';
-  document.documentElement.style.colorScheme = '';
+  scheme.content = 'light';
+  document.documentElement.style.colorScheme = 'only light';
 }
 
 function applyBrandLogo() {
