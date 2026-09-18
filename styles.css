@@ -155,6 +155,30 @@
   .dark-band .concept, .dark-band .concept:first-child, .dark-band .concept:last-child { border-color: rgba(215, 181, 127, 0.36); background: rgba(255, 253, 250, 0.045); box-shadow: none; }
 }
 
+/* Site-wide navigation footer. It is populated by script.js so it also covers new pages. */
+.site-footer--navigation { background: #0e1518; color: #f7f3ec; }
+.site-footer--navigation .footer-inner { padding: clamp(56px, 7vw, 92px) 0 25px; }
+.footer-navigation { display: grid; grid-template-columns: minmax(210px, 1.35fr) repeat(3, minmax(145px, 0.72fr)); gap: clamp(28px, 5vw, 76px); }
+.footer-branding .brand { color: #f7f3ec; }
+.footer-branding .footer-note { max-width: 285px; margin-top: 16px; color: rgba(247, 243, 236, 0.72); }
+.footer-group { display: grid; align-content: start; gap: 11px; }
+.footer-group h2 { margin: 0 0 8px; color: #d7b57f; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.14em; line-height: 1.2; text-transform: uppercase; }
+.footer-group a { color: rgba(247, 243, 236, 0.78); font-size: 0.88rem; line-height: 1.35; text-decoration: none; transition: color 180ms ease, transform 180ms ease; }
+.footer-group a:hover { color: #f7f3ec; transform: translateX(3px); }
+.site-footer--navigation .footer-bottom { margin-top: clamp(42px, 6vw, 74px); padding-top: 20px; border-top: 1px solid rgba(247, 243, 236, 0.16); }
+.footer-back-to-top { color: #d7b57f !important; }
+
+@media (max-width: 960px) {
+  .footer-navigation { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 38px 30px; }
+  .footer-branding { grid-column: 1 / -1; }
+}
+
+@media (max-width: 560px) {
+  .footer-navigation { grid-template-columns: 1fr; gap: 33px; }
+  .footer-branding { grid-column: auto; }
+  .site-footer--navigation .footer-bottom { gap: 12px; }
+}
+
 /* Keep the Daniel Belmont diary card deliberately dark in every display mode. */
 .update-project.update-project--dark {
   background: #142126 !important;

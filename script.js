@@ -255,6 +255,62 @@ function updateFooterTone(language = currentLanguage) {
     : 'Scrittura, progetti e idee in cammino.';
 }
 
+function setupSiteFooter(language = currentLanguage) {
+  const footer = document.querySelector('.site-footer');
+  if (!footer || footer.dataset.navigationFooter === 'true') return;
+
+  const isEnglish = language === 'en';
+  const path = (fileName) => getCleanPath(fileName, language);
+  const campaignUrl = 'https://www.kickstarter.com/projects/davideguerra/daniel-belmont-the-day-no-one-called?ref=profile_created&category_id=47';
+  const copy = isEnglish
+    ? {
+        description: 'Writing, projects and ideas in motion.',
+        explore: 'Explore', paths: 'Projects', contact: 'Stay in touch',
+        home: 'Home', author: 'Author', works: 'Books', projects: 'Projects', updates: 'Updates', reviews: 'Reviews',
+        art: 'The Art of Solitude', daniel: 'Daniel Belmont journal', campaign: 'English Kickstarter',
+        newsletter: 'Newsletter', contacts: 'Contact', email: 'Email', privacy: 'Privacy', back: 'Back to top',
+        copyright: '© 2026 Davide Guerra'
+      }
+    : {
+        description: 'Scrittura, progetti e idee in cammino.',
+        explore: 'Esplora', paths: 'Percorsi', contact: 'Restiamo in contatto',
+        home: 'Home', author: 'Autore', works: 'Opere', projects: 'Progetti', updates: 'Aggiornamenti', reviews: 'Recensioni',
+        art: 'L’Arte della Solitudine', daniel: 'Diario di Daniel Belmont', campaign: 'Kickstarter inglese',
+        newsletter: 'Newsletter', contacts: 'Contatti', email: 'Email', privacy: 'Privacy', back: 'Torna su',
+        copyright: '© 2026 Davide Guerra'
+      };
+
+  const header = document.querySelector('.site-header');
+  if (header && !header.id) header.id = 'top';
+
+  footer.classList.add('site-footer--navigation');
+  footer.dataset.navigationFooter = 'true';
+  footer.innerHTML = `
+    <div class="footer-inner">
+      <div class="footer-navigation">
+        <div class="footer-branding">
+          <a class="brand" href="${path('index.html')}"><span class="brand-mark">DG</span><span>Davide Guerra</span></a>
+          <p class="footer-note">${copy.description}</p>
+        </div>
+        <nav class="footer-group" aria-label="${copy.explore}">
+          <h2>${copy.explore}</h2>
+          <a href="${path('index.html')}">${copy.home}</a><a href="${path('chi-sono.html')}">${copy.author}</a><a href="${path('libri.html')}">${copy.works}</a><a href="${path('progetti.html')}">${copy.projects}</a><a href="${path('aggiornamenti.html')}">${copy.updates}</a><a href="${path('recensioni.html')}">${copy.reviews}</a>
+        </nav>
+        <nav class="footer-group" aria-label="${copy.paths}">
+          <h2>${copy.paths}</h2>
+          <a href="${path('diario-arte-della-solitudine.html')}">${copy.art}</a><a href="${path('diario-daniel-belmont.html')}">${copy.daniel}</a><a href="${campaignUrl}" target="_blank" rel="noopener noreferrer">${copy.campaign} <span aria-hidden="true">↗</span></a>
+        </nav>
+        <nav class="footer-group" aria-label="${copy.contact}">
+          <h2>${copy.contact}</h2>
+          <a href="${path('contatti.html')}#newsletter">${copy.newsletter}</a><a href="${path('contatti.html')}">${copy.contacts}</a><a href="mailto:davideguerra.studio@gmail.com">${copy.email}</a><a href="${path('privacy.html')}">${copy.privacy}</a>
+        </nav>
+      </div>
+      <div class="footer-bottom"><span>${copy.copyright}</span><a class="footer-back-to-top" href="#top">${copy.back} ↑</a></div>
+    </div>`;
+  applyBrandLogo();
+  normaliseInternalLinks(footer);
+}
+
 function softenHomeTone(language = currentLanguage) {
   if (pageName !== 'index.html') return;
   const eyebrow = document.querySelector('.home-hero .eyebrow');
@@ -586,6 +642,7 @@ function copyPageContent(source, language) {
   currentMain.replaceWith(nextMain);
   if (sourceNavigation && currentNavigation) currentNavigation.replaceWith(sourceNavigation.cloneNode(true));
   if (sourceFooter && currentFooter) currentFooter.replaceWith(sourceFooter.cloneNode(true));
+  setupSiteFooter(language);
   applyBrandLogo();
   updateFooterTone(language);
   softenHomeTone(language);
@@ -833,6 +890,7 @@ enhanceMotion();
 ensureColourScheme();
 ensureFavicon();
 applyBrandLogo();
+setupSiteFooter();
 updateFooterTone();
 softenHomeTone();
 setupWebAnalytics();
