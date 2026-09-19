@@ -87,6 +87,10 @@ function normaliseLegacyAddress() {
   window.history.replaceState({}, '', `${cleanPath}${window.location.search}${window.location.hash}`);
 }
 
+function useVerticalTitleSeparator(title = document.title) {
+  return title.replace(/\s+—\s+/g, ' | ');
+}
+
 function normaliseInternalLinks(scope = document) {
   scope.querySelectorAll('a[href]').forEach((anchor) => {
     const reference = anchor.getAttribute('href');
@@ -102,6 +106,7 @@ function normaliseInternalLinks(scope = document) {
 }
 
 normaliseLegacyAddress();
+document.title = useVerticalTitleSeparator();
 document.documentElement.classList.remove('theme-dark');
 document.documentElement.removeAttribute('data-theme-preference');
 try {
@@ -220,8 +225,9 @@ function ensureFavicon() {
     icon.rel = 'icon';
     document.head.append(icon);
   }
-  icon.type = 'image/svg+xml';
-  icon.href = `${assetPrefix}favicon.svg?v=20260919-1`;
+  // Keep the favicon identical to Davide's original logo: do not redraw it.
+  icon.type = 'image/png';
+  icon.href = `${assetPrefix}img/logo-dg.png?v=20260919-2`;
 }
 
 function ensureColourScheme() {
@@ -688,7 +694,8 @@ function copyPageContent(source, language) {
   normaliseInternalLinks(document);
 
   document.documentElement.lang = language;
-  document.title = source.title;
+  document.title = useVerticalTitleSeparator(source.title);
+  ensureFavicon();
 
   const nextDescription = source.querySelector('meta[name="description"]')?.getAttribute('content');
   const description = document.querySelector('meta[name="description"]');
