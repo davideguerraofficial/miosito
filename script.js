@@ -255,6 +255,37 @@ function updateFooterTone(language = currentLanguage) {
     : 'Scrittura, progetti e idee in cammino.';
 }
 
+function gentlyScrollToPageStart() {
+  const startingPoint = window.scrollY;
+  if (startingPoint < 2) return;
+
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    return;
+  }
+
+  // A short editorial-paced return: long enough to orient the reader, but
+  // capped so a very long page never turns into a wait.
+  const duration = Math.min(1300, Math.max(720, Math.round(startingPoint * 0.14)));
+  const startedAt = performance.now();
+  const originalScrollBehavior = document.documentElement.style.scrollBehavior;
+  document.documentElement.style.scrollBehavior = 'auto';
+
+  const animate = (now) => {
+    const progress = Math.min((now - startedAt) / duration, 1);
+    const easedProgress = 1 - Math.pow(1 - progress, 4);
+    window.scrollTo(0, Math.round(startingPoint * (1 - easedProgress)));
+
+    if (progress < 1) {
+      window.requestAnimationFrame(animate);
+    } else {
+      document.documentElement.style.scrollBehavior = originalScrollBehavior;
+    }
+  };
+
+  window.requestAnimationFrame(animate);
+}
+
 function setupSiteFooter(language = currentLanguage) {
   const footer = document.querySelector('.site-footer');
   if (!footer || footer.dataset.navigationFooter === 'true') return;
@@ -309,6 +340,10 @@ function setupSiteFooter(language = currentLanguage) {
     </div>`;
   applyBrandLogo();
   normaliseInternalLinks(footer);
+  footer.querySelector('.footer-back-to-top')?.addEventListener('click', (event) => {
+    event.preventDefault();
+    gentlyScrollToPageStart();
+  });
   enhanceMotion(document);
 }
 
