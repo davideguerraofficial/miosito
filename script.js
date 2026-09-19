@@ -220,8 +220,8 @@ function ensureFavicon() {
     icon.rel = 'icon';
     document.head.append(icon);
   }
-  icon.type = 'image/png';
-  icon.href = `${assetPrefix}img/logo-dg.png?v=20260915-2`;
+  icon.type = 'image/svg+xml';
+  icon.href = `${assetPrefix}favicon.svg?v=20260919-1`;
 }
 
 function ensureColourScheme() {

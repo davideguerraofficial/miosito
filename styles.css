@@ -249,6 +249,25 @@
   color: #142126 !important;
 }
 
+/* The reading line stays horizontal; the vertical mark belongs to the browser tab icon. */
+.reading-progress {
+  top: 0 !important;
+  right: 0 !important;
+  bottom: auto !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 2px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: rgba(244, 240, 232, 0.34) !important;
+  box-shadow: none !important;
+}
+.reading-progress::after {
+  background: linear-gradient(90deg, #c2a06e, #f1d8a7) !important;
+  transform: scaleX(var(--reading-progress)) !important;
+  transform-origin: left center !important;
+}
+
 /* Site-wide navigation footer. It is populated by script.js so it also covers new pages. */
 .site-footer--navigation { background: #0e1518; color: #f7f3ec; }
 .site-footer--navigation .footer-inner { padding: clamp(56px, 7vw, 92px) 0 25px; }
