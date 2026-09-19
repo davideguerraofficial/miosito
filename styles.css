@@ -155,6 +155,100 @@
   .dark-band .concept, .dark-band .concept:first-child, .dark-band .concept:last-child { border-color: rgba(215, 181, 127, 0.36); background: rgba(255, 253, 250, 0.045); box-shadow: none; }
 }
 
+/* Final layout and contrast safeguards. These rules deliberately come last so
+   the editorial palette remains stable across every page and colour setting. */
+.section { padding: clamp(52px, 7vw, 88px) 0; }
+.section > .section-inner > .linktree-panel { margin-top: 0; }
+.book-guide { margin-top: clamp(38px, 5vw, 60px); }
+
+/* The reading indicator becomes a discreet vertical sidebar on larger screens. */
+.reading-progress {
+  --reading-progress: 0;
+  z-index: 50;
+  overflow: hidden;
+  background: rgba(244, 240, 232, 0.34) !important;
+  transform: none !important;
+}
+.reading-progress::after {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, #c2a06e, #f1d8a7);
+  content: "";
+  transform: scaleX(var(--reading-progress));
+  transform-origin: left center;
+}
+
+@media (min-width: 961px) {
+  .reading-progress {
+    top: calc(50% - 92px);
+    right: 18px;
+    bottom: auto;
+    left: auto;
+    width: 4px;
+    height: 184px;
+    border: 1px solid rgba(244, 240, 232, 0.34);
+    border-radius: 999px;
+    background: rgba(17, 26, 30, 0.16) !important;
+    box-shadow: 0 2px 12px rgba(17, 26, 30, 0.12);
+  }
+  .reading-progress::after {
+    background: linear-gradient(180deg, #f1d8a7, #b98a4f);
+    transform: scaleY(var(--reading-progress));
+    transform-origin: center bottom;
+  }
+}
+
+/* Instagram is the primary social channel. */
+.platform.platform--featured {
+  min-height: 96px;
+  margin: 12px 0;
+  padding: 13px 16px;
+  border: 1px solid #c2a06e;
+  background: #eee0c5;
+  box-shadow: 0 10px 24px rgba(17, 26, 30, 0.07);
+}
+.platform.platform--featured strong { font-size: 1rem; }
+.platform.platform--featured small { max-width: 400px; }
+.platform.platform--featured .platform-feature-label {
+  display: inline-block;
+  margin-top: 7px;
+  padding: 3px 6px;
+  background: #142126;
+  color: #f7f3ec;
+  font-family: var(--sans);
+  font-size: 0.6rem;
+  font-style: normal;
+  font-weight: 700;
+  letter-spacing: 0.11em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+/* Daniel Belmont must always remain a dark, fully readable card. */
+.edition-card.edition-card--dark {
+  border-color: #142126 !important;
+  background: #142126 !important;
+  color: #f7f3ec !important;
+}
+.edition-card.edition-card--dark .eyebrow { color: #d7b57f !important; }
+.edition-card.edition-card--dark h3 { color: #f7f3ec !important; }
+.edition-card.edition-card--dark p { color: rgba(247, 243, 236, 0.82) !important; opacity: 1; }
+.edition-card.edition-card--dark .button.button--light {
+  border-color: #f7f3ec !important;
+  background: #f7f3ec !important;
+  color: #142126 !important;
+}
+.edition-card.edition-card--dark .button.button--outline {
+  border-color: rgba(247, 243, 236, 0.72) !important;
+  background: transparent !important;
+  color: #f7f3ec !important;
+}
+.edition-card.edition-card--dark .button.button--outline:hover {
+  border-color: #f7f3ec !important;
+  background: #f7f3ec !important;
+  color: #142126 !important;
+}
+
 /* Site-wide navigation footer. It is populated by script.js so it also covers new pages. */
 .site-footer--navigation { background: #0e1518; color: #f7f3ec; }
 .site-footer--navigation .footer-inner { padding: clamp(56px, 7vw, 92px) 0 25px; }
@@ -2174,4 +2268,108 @@ html, body { background: var(--paper); color: var(--body-text); }
   .project-card:nth-child(4) { background: var(--surface-soft); }
   .progress-project.progress-project--featured { background: var(--ink); border-color: var(--ink); color: var(--paper); }
   .dark-band .concept, .dark-band .concept:first-child, .dark-band .concept:last-child { border-color: rgba(215, 181, 127, 0.36); background: rgba(255, 253, 250, 0.045); box-shadow: none; }
+}
+
+/* Keep consecutive editorial sections close enough to feel connected. */
+.section:has(.project-grid),
+.section:has(.books),
+.section:has(.updates-feed-inner) { padding-bottom: clamp(34px, 4vw, 48px); }
+.section:has(.kickstarter-callout),
+.section:has(.book-guide),
+.section:has(.updates-archive) { padding-top: clamp(34px, 4vw, 48px); }
+.book-guide,
+.updates-archive { margin-top: 0; }
+
+/* Final layout and contrast safeguards. These rules deliberately come last so
+   the editorial palette remains stable across every page and colour setting. */
+.section { padding: clamp(52px, 7vw, 88px) 0; }
+.section > .section-inner > .linktree-panel { margin-top: 0; }
+.book-guide { margin-top: 0; }
+
+/* The reading indicator becomes a discreet vertical sidebar on larger screens. */
+.reading-progress {
+  --reading-progress: 0;
+  z-index: 50;
+  overflow: hidden;
+  background: rgba(244, 240, 232, 0.34) !important;
+  transform: none !important;
+}
+.reading-progress::after {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, #c2a06e, #f1d8a7);
+  content: "";
+  transform: scaleX(var(--reading-progress));
+  transform-origin: left center;
+}
+
+@media (min-width: 961px) {
+  .reading-progress {
+    top: calc(50% - 92px);
+    right: 18px;
+    bottom: auto;
+    left: auto;
+    width: 4px;
+    height: 184px;
+    border: 1px solid rgba(244, 240, 232, 0.34);
+    border-radius: 999px;
+    background: rgba(17, 26, 30, 0.16) !important;
+    box-shadow: 0 2px 12px rgba(17, 26, 30, 0.12);
+  }
+  .reading-progress::after {
+    background: linear-gradient(180deg, #f1d8a7, #b98a4f);
+    transform: scaleY(var(--reading-progress));
+    transform-origin: center bottom;
+  }
+}
+
+/* Instagram is the primary social channel. */
+.platform.platform--featured {
+  min-height: 96px;
+  margin: 12px 0;
+  padding: 13px 16px;
+  border: 1px solid #c2a06e;
+  background: #eee0c5;
+  box-shadow: 0 10px 24px rgba(17, 26, 30, 0.07);
+}
+.platform.platform--featured strong { font-size: 1rem; }
+.platform.platform--featured small { max-width: 400px; }
+.platform.platform--featured .platform-feature-label {
+  display: inline-block;
+  margin-top: 7px;
+  padding: 3px 6px;
+  background: #142126;
+  color: #f7f3ec;
+  font-family: var(--sans);
+  font-size: 0.6rem;
+  font-style: normal;
+  font-weight: 700;
+  letter-spacing: 0.11em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+/* Daniel Belmont must always remain a dark, fully readable card. */
+.edition-card.edition-card--dark {
+  border-color: #142126 !important;
+  background: #142126 !important;
+  color: #f7f3ec !important;
+}
+.edition-card.edition-card--dark .eyebrow { color: #d7b57f !important; }
+.edition-card.edition-card--dark h3 { color: #f7f3ec !important; }
+.edition-card.edition-card--dark p { color: rgba(247, 243, 236, 0.82) !important; opacity: 1; }
+.edition-card.edition-card--dark .button.button--light {
+  border-color: #f7f3ec !important;
+  background: #f7f3ec !important;
+  color: #142126 !important;
+}
+.edition-card.edition-card--dark .button.button--outline {
+  border-color: rgba(247, 243, 236, 0.72) !important;
+  background: transparent !important;
+  color: #f7f3ec !important;
+}
+.edition-card.edition-card--dark .button.button--outline:hover {
+  border-color: #f7f3ec !important;
+  background: #f7f3ec !important;
+  color: #142126 !important;
 }

@@ -309,6 +309,7 @@ function setupSiteFooter(language = currentLanguage) {
     </div>`;
   applyBrandLogo();
   normaliseInternalLinks(footer);
+  enhanceMotion(document);
 }
 
 function softenHomeTone(language = currentLanguage) {
@@ -704,7 +705,7 @@ function setupPageAtmosphere() {
 function enhanceMotion(scope = document) {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-  const elements = [...scope.querySelectorAll('.hero-copy, .hero-image-wrap, .newsletter-invitation__panel, .section-header, .work-row, .concept, .progress-project, .book-feature, .book-guide, .review-category, .review-card, .voice-card, .project-card, .update-project, .update-entry, .contact-layout, .kickstarter-feature, .kickstarter-step, .kickstarter-callout')]
+  const elements = [...scope.querySelectorAll('.hero-copy, .hero-image-wrap, .newsletter-invitation__panel, .section-header, .work-row, .concept, .progress-project, .book-feature, .book-guide, .review-category, .review-card, .voice-card, .project-card, .update-project, .update-entry, .contact-layout, .kickstarter-feature, .kickstarter-step, .kickstarter-callout, .site-footer--navigation')]
     .filter((element) => !element.dataset.motionReady);
 
   const observer = new IntersectionObserver((entries, currentObserver) => {
@@ -732,7 +733,7 @@ function setupReadingProgress() {
   const updateProgress = () => {
     const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
     const position = scrollableHeight > 0 ? Math.min(window.scrollY / scrollableHeight, 1) : 0;
-    progress.style.transform = `scaleX(${position})`;
+    progress.style.setProperty('--reading-progress', String(position));
   };
 
   window.addEventListener('scroll', updateProgress, { passive: true });
