@@ -227,7 +227,7 @@ function ensureFavicon() {
   }
   // Keep the favicon identical to Davide's original logo: do not redraw it.
   icon.type = 'image/png';
-  icon.href = `${assetPrefix}img/logo-dg.png?v=20260919-2`;
+  icon.href = `${assetPrefix}img/logo-dg.png`;
 }
 
 function ensureColourScheme() {
