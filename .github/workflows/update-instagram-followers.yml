@@ -1,0 +1,85 @@
+name: Update Instagram follower count
+
+on:
+  schedule:
+    - cron: "17 5 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Read website files
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Read current Instagram follower count
+        env:
+          INSTAGRAM_FOLLOWERS_API_URL: ${{ vars.INSTAGRAM_FOLLOWERS_API_URL }}
+          INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
+        shell: bash
+        run: |
+          node --input-type=module <<'NODE'
+          import { readFile, writeFile } from 'node:fs/promises';
+
+          const apiUrl = process.env.INSTAGRAM_FOLLOWERS_API_URL;
+          const accessToken = process.env.INSTAGRAM_ACCESS_TOKEN;
+          const outputPath = 'data/instagram.json';
+
+          if (!apiUrl || !accessToken) {
+            console.log('Instagram counter not configured. Add the repository variable and secret.');
+            process.exit(0);
+          }
+
+          const url = new URL(apiUrl);
+          url.searchParams.set('access_token', accessToken);
+          const response = await fetch(url, { headers: { Accept: 'application/json' } });
+
+          if (!response.ok) {
+            throw new Error(`Instagram API request failed with status ${response.status}.`);
+          }
+
+          const payload = await response.json();
+          const followers = Number(payload.followers_count);
+          if (!Number.isInteger(followers) || followers < 0) {
+            throw new Error('Instagram API response does not contain a valid followers_count value.');
+          }
+
+          let current = {};
+          try {
+            current = JSON.parse(await readFile(outputPath, 'utf8'));
+          } catch {
+            current = {};
+          }
+
+          if (Number(current.followers) === followers) {
+            console.log(`Instagram follower count is unchanged at ${followers}.`);
+            process.exit(0);
+          }
+
+          await writeFile(outputPath, `${JSON.stringify({
+            followers,
+            updatedAt: new Date().toISOString(),
+            source: 'Instagram API'
+          }, null, 2)}\n`);
+          console.log(`Instagram follower count updated to ${followers}.`);
+          NODE
+
+      - name: Save a changed count
+        run: |
+          if git diff --quiet -- data/instagram.json; then
+            echo "Follower count unchanged or integration not configured."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/instagram.json
+          git commit -m "Update Instagram follower count"
+          git push
