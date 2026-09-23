@@ -5,6 +5,11 @@ const siteHeader = document.querySelector('.site-header');
 function setNav(open) {
   if (!navToggle || !nav) return;
   navToggle.setAttribute('aria-expanded', String(open));
+  navToggle.setAttribute('aria-label', open ? navToggle.dataset.closeLabel : navToggle.dataset.openLabel);
+  const label = navToggle.querySelector('.nav-toggle__label');
+  if (label) label.textContent = open
+    ? (document.documentElement.lang === 'it' ? 'Chiudi' : 'Close')
+    : 'Menu';
   nav.classList.toggle('is-open', open);
   document.body.classList.toggle('nav-open', open);
 }
@@ -12,6 +17,7 @@ function setNav(open) {
 navToggle?.addEventListener('click', () => setNav(navToggle.getAttribute('aria-expanded') !== 'true'));
 nav?.addEventListener('click', (event) => { if (event.target.closest('a')) setNav(false); });
 document.addEventListener('keydown', (event) => { if (event.key === 'Escape') setNav(false); });
+window.addEventListener('resize', () => { if (window.innerWidth >= 1160) setNav(false); });
 
 if (siteHeader) {
   const updateHeader = () => siteHeader.classList.toggle('is-scrolled', window.scrollY > 24);
