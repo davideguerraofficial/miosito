@@ -26,6 +26,42 @@ if (siteHeader) {
 }
 
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+document.querySelectorAll('[data-newsletter-jump]').forEach((link) => {
+  link.addEventListener('click', (event) => {
+    const destination = new URL(link.href, window.location.href);
+    const currentPath = window.location.pathname.replace(/\/$/, '') || '/';
+    const destinationPath = destination.pathname.replace(/\/$/, '') || '/';
+    const target = document.querySelector('#newsletter-signup');
+
+    if (currentPath === destinationPath && target) {
+      event.preventDefault();
+      target.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' });
+      window.history.replaceState(null, '', `${destination.pathname}#newsletter-signup`);
+      return;
+    }
+
+    event.preventDefault();
+    try { window.sessionStorage.setItem('newsletterJump', '1'); } catch {}
+    destination.hash = '';
+    window.location.assign(destination.href);
+  });
+});
+
+try {
+  if (window.sessionStorage.getItem('newsletterJump') === '1') {
+    const target = document.querySelector('#newsletter-signup');
+    window.sessionStorage.removeItem('newsletterJump');
+    if (target) {
+      window.scrollTo(0, 0);
+      window.setTimeout(() => {
+        target.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' });
+        window.history.replaceState(null, '', `${window.location.pathname}#newsletter-signup`);
+      }, reducedMotion ? 0 : 350);
+    }
+  }
+} catch {}
+
 if (!reducedMotion && 'IntersectionObserver' in window) {
   const observer = new IntersectionObserver((entries, currentObserver) => {
     entries.forEach((entry) => {
