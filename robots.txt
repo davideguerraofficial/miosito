@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://davideguerra.com/sitemap.xml
