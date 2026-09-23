@@ -1,5 +1,6 @@
 const navToggle = document.querySelector('[data-nav-toggle]');
 const nav = document.querySelector('[data-site-nav]');
+const siteHeader = document.querySelector('.site-header');
 
 function setNav(open) {
   if (!navToggle || !nav) return;
@@ -11,6 +12,12 @@ function setNav(open) {
 navToggle?.addEventListener('click', () => setNav(navToggle.getAttribute('aria-expanded') !== 'true'));
 nav?.addEventListener('click', (event) => { if (event.target.closest('a')) setNav(false); });
 document.addEventListener('keydown', (event) => { if (event.key === 'Escape') setNav(false); });
+
+if (siteHeader) {
+  const updateHeader = () => siteHeader.classList.toggle('is-scrolled', window.scrollY > 24);
+  updateHeader();
+  window.addEventListener('scroll', updateHeader, { passive: true });
+}
 
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 if (!reducedMotion && 'IntersectionObserver' in window) {
@@ -66,4 +73,49 @@ document.querySelectorAll('[data-newsletter-form]').forEach((form) => {
     button.disabled = true;
     button.textContent = document.documentElement.lang === 'it' ? 'Invio…' : 'Sending…';
   });
+});
+
+document.querySelectorAll('[data-instagram-counter]').forEach(async (section) => {
+  const count = section.querySelector('[data-instagram-count]');
+  const label = section.querySelector('[data-instagram-count-label]');
+  const updated = section.querySelector('[data-instagram-updated]');
+  if (!count || !label) return;
+
+  try {
+    const response = await fetch('/data/instagram.json', { cache: 'no-store' });
+    if (!response.ok) return;
+    const data = await response.json();
+    const followers = typeof data.followers === 'number' ? data.followers : Number.NaN;
+    if (!Number.isFinite(followers) || followers < 0) return;
+
+    const lang = section.dataset.lang === 'it' ? 'it-IT' : 'en-US';
+    const format = new Intl.NumberFormat(lang);
+    const duration = 1150;
+    const render = (value) => { count.textContent = format.format(Math.round(value)); };
+    label.textContent = section.dataset.lang === 'it' ? 'Follower su Instagram' : 'Instagram followers';
+    section.classList.add('has-count');
+
+    if (reducedMotion) {
+      render(followers);
+    } else {
+      const started = performance.now();
+      const tick = (now) => {
+        const progress = Math.min(1, (now - started) / duration);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        render(followers * eased);
+        if (progress < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    }
+
+    if (updated && data.updatedAt) {
+      const date = new Date(data.updatedAt);
+      if (!Number.isNaN(date.getTime())) {
+        updated.textContent = `${section.dataset.lang === 'it' ? 'Aggiornato il' : 'Updated'} ${new Intl.DateTimeFormat(lang, { day: 'numeric', month: 'short', year: 'numeric' }).format(date)}`;
+        updated.hidden = false;
+      }
+    }
+  } catch {
+    // The Instagram link remains fully usable when live data is unavailable.
+  }
 });
