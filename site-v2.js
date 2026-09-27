@@ -26,6 +26,7 @@ if (siteHeader) {
 }
 
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+if (!reducedMotion) document.documentElement.classList.add('has-motion');
 
 document.querySelectorAll('[data-newsletter-jump]').forEach((link) => {
   link.addEventListener('click', (event) => {
@@ -62,6 +63,28 @@ try {
   }
 } catch {}
 
+const motionGroups = [
+  ['.timeline .update-item', (index) => index % 2 ? 'motion-slide-right' : 'motion-slide-left'],
+  ['.visual-frame', () => 'motion-clip'],
+  ['.cards > .card', () => 'motion-scale'],
+  ['.project-row', () => 'motion-slide-left'],
+  ['.character-panel > *, .project-facts > *, .book-concept > *, .about-grid > *, .contact-grid > *', (index) => index % 2 ? 'motion-slide-right' : 'motion-slide-left'],
+  ['.book-reading-notes article, .book-excerpts-grid > *, .values-grid > div, .logo-story__parts li, .contact-links a, .instagram-note__trail span', () => 'motion-scale'],
+  ['.updates-toolbar', () => 'motion-scale']
+];
+
+motionGroups.forEach(([selector, variant]) => {
+  document.querySelectorAll(selector).forEach((item, index) => {
+    item.classList.add('motion-item', variant(index), `motion-delay-${index % 3}`);
+    if (item.classList.contains('visual-frame') && index % 2) item.classList.add('motion-clip-reverse');
+  });
+});
+
+const revealItems = [...new Set([
+  ...document.querySelectorAll('[data-reveal]'),
+  ...document.querySelectorAll('.motion-item')
+])];
+
 if (!reducedMotion && 'IntersectionObserver' in window) {
   const observer = new IntersectionObserver((entries, currentObserver) => {
     entries.forEach((entry) => {
@@ -69,10 +92,57 @@ if (!reducedMotion && 'IntersectionObserver' in window) {
       entry.target.classList.add('is-visible');
       currentObserver.unobserve(entry.target);
     });
-  }, { threshold: .12 });
-  document.querySelectorAll('[data-reveal]').forEach((item) => observer.observe(item));
+  }, { threshold: .14, rootMargin: '0px 0px -7% 0px' });
+  revealItems.forEach((item) => observer.observe(item));
 } else {
-  document.querySelectorAll('[data-reveal]').forEach((item) => item.classList.add('is-visible'));
+  revealItems.forEach((item) => item.classList.add('is-visible'));
+}
+
+if (!reducedMotion && revealItems.length) {
+  let revealFrameRequested = false;
+  const revealVisibleItems = () => {
+    const revealLine = window.innerHeight * .93;
+    revealItems.forEach((item) => {
+      if (item.classList.contains('is-visible')) return;
+      const rect = item.getBoundingClientRect();
+      if (rect.top <= revealLine) item.classList.add('is-visible');
+    });
+    revealFrameRequested = false;
+  };
+  const requestVisibleItems = () => {
+    if (revealFrameRequested) return;
+    revealFrameRequested = true;
+    requestAnimationFrame(revealVisibleItems);
+  };
+  revealVisibleItems();
+  window.addEventListener('scroll', requestVisibleItems, { passive: true });
+  window.addEventListener('resize', requestVisibleItems);
+}
+
+const parallaxImages = [...document.querySelectorAll('.hero__media img, .page-hero__media img, .reading-hero__media img, .page-hero__brand-art img')];
+if (!reducedMotion && parallaxImages.length) {
+  let frameRequested = false;
+  const updateParallax = () => {
+    const viewportHeight = window.innerHeight || 1;
+    parallaxImages.forEach((image) => {
+      const frame = image.parentElement;
+      const rect = frame.getBoundingClientRect();
+      if (rect.bottom < -80 || rect.top > viewportHeight + 80) return;
+      const centre = rect.top + rect.height / 2;
+      const ratio = (viewportHeight / 2 - centre) / (viewportHeight + rect.height);
+      const shift = Math.max(-16, Math.min(16, ratio * 34));
+      image.style.setProperty('--scroll-shift', `${shift.toFixed(2)}px`);
+    });
+    frameRequested = false;
+  };
+  const requestParallax = () => {
+    if (frameRequested) return;
+    frameRequested = true;
+    requestAnimationFrame(updateParallax);
+  };
+  updateParallax();
+  window.addEventListener('scroll', requestParallax, { passive: true });
+  window.addEventListener('resize', requestParallax);
 }
 
 const progress = document.querySelector('[data-reading-progress]');
@@ -117,47 +187,3 @@ document.querySelectorAll('[data-newsletter-form]').forEach((form) => {
   });
 });
 
-document.querySelectorAll('[data-instagram-counter]').forEach(async (section) => {
-  const count = section.querySelector('[data-instagram-count]');
-  const label = section.querySelector('[data-instagram-count-label]');
-  const updated = section.querySelector('[data-instagram-updated]');
-  if (!count || !label) return;
-
-  try {
-    const response = await fetch('/data/instagram.json', { cache: 'no-store' });
-    if (!response.ok) return;
-    const data = await response.json();
-    const followers = typeof data.followers === 'number' ? data.followers : Number.NaN;
-    if (!Number.isFinite(followers) || followers < 0) return;
-
-    const lang = section.dataset.lang === 'it' ? 'it-IT' : 'en-US';
-    const format = new Intl.NumberFormat(lang);
-    const duration = 1150;
-    const render = (value) => { count.textContent = format.format(Math.round(value)); };
-    label.textContent = section.dataset.lang === 'it' ? 'Follower su Instagram' : 'Instagram followers';
-    section.classList.add('has-count');
-
-    if (reducedMotion) {
-      render(followers);
-    } else {
-      const started = performance.now();
-      const tick = (now) => {
-        const progress = Math.min(1, (now - started) / duration);
-        const eased = 1 - Math.pow(1 - progress, 3);
-        render(followers * eased);
-        if (progress < 1) requestAnimationFrame(tick);
-      };
-      requestAnimationFrame(tick);
-    }
-
-    if (updated && data.updatedAt) {
-      const date = new Date(data.updatedAt);
-      if (!Number.isNaN(date.getTime())) {
-        updated.textContent = `${section.dataset.lang === 'it' ? 'Aggiornato il' : 'Updated'} ${new Intl.DateTimeFormat(lang, { day: 'numeric', month: 'short', year: 'numeric' }).format(date)}`;
-        updated.hidden = false;
-      }
-    }
-  } catch {
-    // The Instagram link remains fully usable when live data is unavailable.
-  }
-});
